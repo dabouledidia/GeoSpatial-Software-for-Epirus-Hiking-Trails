@@ -1,0 +1,42 @@
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title mb-4">Add New User</h2>
+            <form [formGroup]="userRegister" (ngSubmit)="register()">
+                
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">First Name</label>
+                    <input type="text" id="firstname" class="form-control" formControlName="firstname" required>
+                </div>
+                    <br/><br/><br/>
+
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" id="lastname" class="form-control" formControlName="lastname" required>
+                </div>
+                    <br/><br/><br/>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" formControlName="email" required>
+                </div>
+                    <br/><br/><br/>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="text" id="password" class="form-control" formControlName="password" required>
+                </div>
+
+                    <br/><br/><br/>
+
+                <button type="submit" class="btn btn-primary" [disabled]="userRegister.invalid">
+                    Add user
+                </button>
+
+                <br/><br/><br/>
+                <a routerLink="/login"> already registered</a>
+ 
+            </form>
+        </div>
+    </div>
+</div>
