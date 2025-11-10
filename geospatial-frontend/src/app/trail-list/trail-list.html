@@ -1,0 +1,26 @@
+<h2> Trail List</h2>
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th>Trail Name</th>
+            <th>Location</th>
+            <th>Length (Km)</th>
+            <th>Duration</th>
+            <th>Difficulty</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let trail of trails">
+            <td> {{trail.name}} </td>
+            <td> {{trail.location}} </td>
+            <td> {{trail.lengthKm}} </td>
+            <td> {{trail.duration}} </td>
+            <td> {{trail.difficulty}} </td>
+            <td> {{trail.description}} </td>
+            <td>
+                <button (click)="deleteTrail(trail.id!)" class="btn btn-danger"> Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

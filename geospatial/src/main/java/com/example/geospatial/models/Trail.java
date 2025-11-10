@@ -41,19 +41,18 @@ public class Trail {
     @Column(name = "description", length = 2000)
     private String description;
 
-    @Column(name = "path_image")
-    private List<String> pathImage;
+    @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TrailImage> pathImages = new ArrayList<>();
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
 
     public Trail(){}
 
-    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description,
-            List<String> pathImage) {
+    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description) {
                 super();
                 this.name = name;
                 this.location = location;
@@ -61,9 +60,6 @@ public class Trail {
                 this.duration = duration;
                 this.difficulty = difficulty;
                 this.description = description;
-                this.pathImage = pathImage;
-                this.reviews = new ArrayList<>();
-                this.createdAt = LocalDateTime.now();
 
     }
 
@@ -123,12 +119,12 @@ public class Trail {
         this.description = description;
     }
 
-    public List<String> getPathImage() {
-        return pathImage;
+    public List<TrailImage> getPathImage() {
+        return pathImages;
     }
 
-    public void setPathImage(List<String> pathImage) {
-        this.pathImage = pathImage;
+    public void setPathImage(List<TrailImage> pathImage) {
+        this.pathImages = pathImage;
     }
 
     public LocalDateTime getCreatedAt() {

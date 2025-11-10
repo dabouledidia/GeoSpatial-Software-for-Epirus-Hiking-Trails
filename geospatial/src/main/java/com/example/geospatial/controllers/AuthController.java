@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,13 +17,13 @@ import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.User;
 import com.example.geospatial.requests.LoginRequest;
 import com.example.geospatial.services.JWTService;
-import com.example.geospatial.services.servicesImpl.UserServiceImpl;
+import com.example.geospatial.services.UserService;
 
 @RestController
 public class AuthController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -34,7 +33,6 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> addUser(@Validated @RequestBody User user){
         try {
             return ResponseEntity.ok(userService.saveUser(user));
@@ -44,7 +42,6 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> loginUser(@Validated @RequestBody LoginRequest loginRequest){
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -70,5 +67,10 @@ public class AuthController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Something went wrong with login");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(){
+        return ResponseEntity.ok(Map.of("message", "User logged out successfully"));
     }
 }

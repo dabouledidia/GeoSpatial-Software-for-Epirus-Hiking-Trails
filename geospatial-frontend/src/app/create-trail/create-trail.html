@@ -1,0 +1,39 @@
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title mb-4">Add New Trail</h2>
+            <form [formGroup]="trailForm" (ngSubmit)="createTrail()">
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Trail Name</label>
+                    <input type="text" id="name" class="form-control" formControlName="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" id="location" class="form-control" formControlName="location" required>
+                </div>
+                <div class="mb-3">
+                    <label for="lengthKm" class="form-label">Length (Km)</label>
+                    <input type="text" id="lengthKm" class="form-control" formControlName="lengthKm" required>
+                </div>
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Duration</label>
+                    <input type="text" id="duration" class="form-control" formControlName="duration" required>
+                </div>
+                <div class="mb-3">
+                    <label for="difficulty" class="form-label">Difficulty</label>
+                    <input type="text" id="difficulty" class="form-control" formControlName="difficulty" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" id="description" class="form-control" formControlName="description" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="trailForm.invalid">
+                    Add Trail
+                </button>
+ 
+            </form>
+        </div>
+    </div>
+</div>

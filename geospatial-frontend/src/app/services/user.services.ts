@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -11,19 +12,9 @@ export class UserServices{
 
     constructor(private http: HttpClient){}
 
-        loginUser(userCredentials: FormGroup){
-        this.http.post(this.apiUrl + "/login", userCredentials.value).subscribe({
-    next: (response: any) => {
-        localStorage.setItem('token', response.jwt);
-        console.log("Login success:", response);
-        alert("Login successfully");
-    },
-    error: (error) => {
-        console.error("Login error:", error);
-        alert("Wrong credentials");
+    loginUser(userCredentials: FormGroup): Observable<any> {
+        return this.http.post(this.apiUrl + "/login", userCredentials.value)
     }
-    });
-        }
 
     register(userRegister: FormGroup){
         this.http.post(this.apiUrl + "/register", userRegister.value).subscribe((userRegister:any)=>{
@@ -32,4 +23,13 @@ export class UserServices{
         console.log(error);
     })
     }
+
+    logout(): void {
+        localStorage.removeItem('token');
+        console.log("Token removed. Current value:", localStorage.getItem('token'));
+    }
+
+    isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }

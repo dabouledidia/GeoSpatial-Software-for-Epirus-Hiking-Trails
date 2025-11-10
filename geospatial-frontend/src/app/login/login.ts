@@ -20,8 +20,22 @@ export class Login {
 
   }
 
-  login(): void {  
-  this.userService.loginUser(this.userCredentials)
-  };
+  login(): void {
+  this.userService.loginUser(this.userCredentials).subscribe({
+    next: (response: any) => {
+      localStorage.setItem('token', response.jwt);
+      console.log("Login success:", response);
+      alert("Login successfully");
+      this.router.navigate(['main-page']); 
+    },
+    error: (error) => { 
+      console.error("Login error:", error);
+      alert("Wrong credentials");
+    }
+  });
+}
+
 
 }
+
+

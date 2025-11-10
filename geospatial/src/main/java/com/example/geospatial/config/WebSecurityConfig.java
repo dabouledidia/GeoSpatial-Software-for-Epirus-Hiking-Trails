@@ -1,63 +1,69 @@
 package com.example.geospatial.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.geospatial.services.servicesImpl.UserServiceImpl;
 
+
 @Configuration
 public class WebSecurityConfig {
 
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    private final UserServiceImpl userServiceImpl;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public WebSecurityConfig(UserServiceImpl userServiceImpl, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userServiceImpl = userServiceImpl;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-
-
     @Bean
-    public AuthenticationManager authenticationManager(
-            HttpSecurity http,
-            BCryptPasswordEncoder bCryptPasswordEncoder,
-            UserServiceImpl userServiceImpl) throws Exception {
-
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder
-            .userDetailsService(userServiceImpl)
-            .passwordEncoder(bCryptPasswordEncoder);
-
+        authBuilder.userDetailsService(userServiceImpl)
+                   .passwordEncoder(bCryptPasswordEncoder);
         return authBuilder.build();
     }
+    
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter();
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .cors(cors -> {})
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {}) 
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/login", "/signup","/register", "/save").permitAll()
-                .requestMatchers("/user/mainpage", "/user/dashboard").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers(
+                    "/login",
+                    "/register",
+                    "/signup",
+                    "/save"
+                    ).permitAll() 
+                .requestMatchers("/user/**").hasRole("USER") 
+                .requestMatchers("/admin/**").hasRole("ADMIN") 
+                .anyRequest().authenticated()
             )
-            .formLogin(form -> form
-                .loginPage("/logiUser")
-                .defaultSuccessUrl("/user/mainpage")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .permitAll()
-            );
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); 
 
         return http.build();
     }
+
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -68,6 +74,7 @@ public class WebSecurityConfig {
                         .allowedOrigins("http://localhost:4200")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
+                        .exposedHeaders("Authorization")
                         .allowCredentials(true);
             }
         };
