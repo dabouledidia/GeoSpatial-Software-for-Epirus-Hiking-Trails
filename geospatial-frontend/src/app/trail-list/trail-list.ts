@@ -30,7 +30,10 @@ export class TrailList {
     this.trailService.deleteTrail(id).subscribe(data =>{
       this.getTrails();
     })
+  }
 
+  createReview(id: number){
+    this.router.navigate([`create-review/${id}`])
   }
 
 }

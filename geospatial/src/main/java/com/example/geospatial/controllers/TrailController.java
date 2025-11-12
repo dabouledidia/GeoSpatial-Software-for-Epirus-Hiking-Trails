@@ -54,6 +54,7 @@ public class TrailController {
         } 
     }
 
+    @PreAuthorize("hasRole('USER')")    
     @PutMapping("/updateTrail")
     public ResponseEntity<?> updateTrail(@Validated @RequestBody Trail trail){
         try {

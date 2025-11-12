@@ -12,7 +12,14 @@ private apiUrl = 'http://localhost:8080/';
     constructor(private http: HttpClient){}
 
     getTrails(): Observable<Trail[]>{
-        return this.http.get<Trail[]>(this.apiUrl + "all_trails");
+        const token = localStorage.getItem('token');
+
+        return this.http.get<Trail[]>(this.apiUrl + "all_trails",{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
     }
 
     createTrail(trail: FormData): Observable<any> {

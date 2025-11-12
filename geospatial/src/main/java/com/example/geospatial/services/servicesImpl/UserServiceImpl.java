@@ -31,6 +31,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public ResponseEntity<?> saveUser(User user) {
+        if (userRepository.findById(user.getEmail()) != null){
+            return ResponseEntity.badRequest().body("User already exists!");
+        }
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);	

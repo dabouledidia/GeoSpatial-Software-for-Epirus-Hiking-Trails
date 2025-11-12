@@ -8,6 +8,7 @@ import { CreateTrail } from './create-trail/create-trail';
 import { MainPage } from './main-page/main-page';
 import { TrailList } from './trail-list/trail-list';
 import { Logout } from './logout/logout';
+import { CreateReview } from './create-review/create-review';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'main-page', pathMatch: 'full'},
@@ -16,6 +17,7 @@ export const routes: Routes = [
     {path: 'register', component: Register},
     {path: 'logout', component: Logout},
     {path: 'create-trail', component: CreateTrail},
+    {path: 'create-review/:id', component: CreateReview},
     {path: 'main-page', component: MainPage}
 ];
 

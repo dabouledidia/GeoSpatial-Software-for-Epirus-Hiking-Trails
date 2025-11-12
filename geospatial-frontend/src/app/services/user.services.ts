@@ -18,9 +18,9 @@ export class UserServices{
 
     register(userRegister: FormGroup){
         this.http.post(this.apiUrl + "/register", userRegister.value).subscribe((userRegister:any)=>{
-            alert("registered!")
+            alert("Registered!")
     }, error =>{
-        console.log(error);
+        alert(console.log(error));
     })
     }
 
