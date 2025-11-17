@@ -2,7 +2,6 @@ package com.example.geospatial.config;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +17,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-    @Component
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JWTService jwtService;
+    private final JWTService jwtService;
+    private final UserDetailsService userServiceImpl;
 
-    @Autowired
-    private UserDetailsService userServiceImpl;
+    public JwtAuthenticationFilter(JWTService jwtService, UserDetailsService userServiceImpl) {
+        this.jwtService = jwtService;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -41,8 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String email = jwtService.extractEmail(token); 
-        
+        String email = jwtService.extractEmail(token);
+
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userServiceImpl.loadUserByUsername(email);
 
@@ -59,5 +60,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
-

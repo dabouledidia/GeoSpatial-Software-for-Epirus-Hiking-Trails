@@ -1,8 +1,8 @@
 package com.example.geospatial.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,17 +15,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.geospatial.services.servicesImpl.UserServiceImpl;
 
-
 @Configuration
 public class WebSecurityConfig {
 
-
     private final UserServiceImpl userServiceImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public WebSecurityConfig(UserServiceImpl userServiceImpl, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurityConfig(UserServiceImpl userServiceImpl,
+                             BCryptPasswordEncoder bCryptPasswordEncoder,
+                             JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userServiceImpl = userServiceImpl;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -35,35 +37,25 @@ public class WebSecurityConfig {
                    .passwordEncoder(bCryptPasswordEncoder);
         return authBuilder.build();
     }
-    
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter();
-    }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> {}) 
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers(
-                    "/login",
-                    "/register",
-                    "/signup",
-                    "/save"
-                    ).permitAll() 
-                .requestMatchers("/user/**").hasRole("USER") 
-                .requestMatchers("/admin/**").hasRole("ADMIN") 
-                .anyRequest().authenticated()
+            .cors(cors -> {})
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/login", "/register", "/signup", "/save").permitAll()
+                .requestMatchers("/reviews/**").authenticated()     
+                .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().permitAll()
             )
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); 
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -71,7 +63,7 @@ public class WebSecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")
+                        .allowedOrigins("http://localhost:4200")  
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("Authorization")

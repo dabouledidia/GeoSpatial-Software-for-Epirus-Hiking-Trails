@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.geospatial.DTO.ReviewDTO;
 import com.example.geospatial.models.Review;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.User;
@@ -24,8 +25,18 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> getReviewsByTrail(Trail trail) {
-        return reviewRepository.findByTrail(trail);
+    public List<ReviewDTO> getReviewsByTrailId(long trailId) {        
+        List<Review> reviews = reviewRepository.findByTrailId(trailId);
+        return reviews.stream().map(r ->
+        new ReviewDTO(
+            r.getId(),
+            r.getRating(),
+            r.getComment(),
+            r.getCreatedAt().toString(),
+            r.getUser().getEmail(),
+            r.getTrail().getId()
+        )
+    ).toList();
     }
 
 }

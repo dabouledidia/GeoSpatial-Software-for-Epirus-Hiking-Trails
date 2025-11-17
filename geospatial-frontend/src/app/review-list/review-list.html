@@ -1,0 +1,20 @@
+<h2> Reviews</h2>
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th>User Id</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let review of reviews">
+            <td> {{review.rating}} </td>
+            <td> {{review.comment}} </td>
+            <td> {{review.date}} </td>
+            <td> {{review.userId}} </td>
+        </tr>
+    </tbody>
+</table>

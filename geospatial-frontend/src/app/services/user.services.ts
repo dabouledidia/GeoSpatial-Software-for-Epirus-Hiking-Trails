@@ -16,12 +16,18 @@ export class UserServices{
         return this.http.post(this.apiUrl + "/login", userCredentials.value)
     }
 
-    register(userRegister: FormGroup){
-        this.http.post(this.apiUrl + "/register", userRegister.value).subscribe((userRegister:any)=>{
-            alert("Registered!")
-    }, error =>{
-        alert(console.log(error));
-    })
+    register(userRegister: FormGroup) {
+        this.http.post(this.apiUrl + "/register", userRegister.value)
+            .subscribe({
+            next: (res: any) => {
+                console.log(res.body);   
+                alert(JSON.stringify(res.body));
+            },
+            error: (err) => {
+                console.error(err);
+                alert("Error");
+            }
+            });
     }
 
     logout(): void {
