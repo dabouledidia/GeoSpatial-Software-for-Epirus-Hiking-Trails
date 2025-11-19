@@ -32,9 +32,9 @@ constructor(
 createTrail(): void {
   if (this.trailForm.invalid) return
 
-  this.trailService.createTrail(this.trailForm.value).subscribe(()=> {
+  this.trailService.createTrail(this.trailForm.value)
     this.router.navigate(['']);
-  })
+  
 }
 }
 

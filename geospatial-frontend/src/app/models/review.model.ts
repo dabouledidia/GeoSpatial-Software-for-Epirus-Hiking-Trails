@@ -2,9 +2,9 @@ export interface Review{
     id?: number;
     rating: number;
     comment: string,
-    date: Date,
+    createdAt: Date,
     trailId: number,
-    userId: string,
+    userEmail: string,
 }
 
 

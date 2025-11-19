@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.repositories.TrailRepository;
 import com.example.geospatial.services.TrailService;
@@ -32,10 +33,28 @@ public class TrailServiceImpl implements TrailService{
     }
 
     @Override
-    public List<Trail> getAllTrail() {
+    public List<TrailDTO> getAllTrail() {
         List<Trail> trails = trailRepository.findAll();
-        return trails;
+
+        return trails.stream().map(r ->
+        new TrailDTO(
+            r.getId(),
+            r.getName(),
+            r.getLocation(),
+            r.getLengthKm(),
+            r.getDuration(),
+            r.getDifficulty(),
+            r.getDescription(),
+            r.getUser().getEmail()
+        )
+    ).toList();
     }
+
+    // @Override
+    // public List<Trail> getUserTrail(String email) {
+    //     List<Trail> trails = trailRepository.findByEmail(email);
+    //     return trails;
+    // }
 
     @Override
     public ResponseEntity<?> updateTrail(Trail trail) {

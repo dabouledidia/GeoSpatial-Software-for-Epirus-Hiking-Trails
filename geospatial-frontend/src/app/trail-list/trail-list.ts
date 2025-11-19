@@ -26,6 +26,12 @@ export class TrailList implements OnInit{
     })
   }
 
+  getUserTrails(){
+    this.trailService.getUserTrails().subscribe((data: Trail[]) =>{
+      this.trails = data;
+    })
+  }
+
   deleteTrail(id: number){
     this.trailService.deleteTrail(id).subscribe(data =>{
       this.getTrails();

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.geospatial.models.CustomUserDetails;
-import com.example.geospatial.models.User;
 import com.example.geospatial.requests.LoginRequest;
+import com.example.geospatial.requests.RegisterRequest;
 import com.example.geospatial.services.JWTService;
 import com.example.geospatial.services.UserService;
 
@@ -33,9 +33,9 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> addUser(@Validated @RequestBody User user){
+    public ResponseEntity<?> addUser(@Validated @RequestBody RegisterRequest registerRequest){
         try {
-            return ResponseEntity.ok(userService.saveUser(user));
+            return ResponseEntity.ok(userService.saveUser(registerRequest));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("something went wrong with register");
         } 

@@ -22,6 +22,17 @@ private apiUrl = 'http://localhost:8080/';
     });
     }
 
+    getUserTrails(): Observable<any[]>{
+        const token = localStorage.getItem('token');
+
+        return this.http.get<any[]>(this.apiUrl + "user_trails",{
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
     createTrail(trail: FormData): Observable<any> {
       return this.http.post(this.apiUrl + "createTrail", trail); 
     }

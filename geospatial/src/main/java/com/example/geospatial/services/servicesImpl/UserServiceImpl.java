@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.User;
 import com.example.geospatial.repositories.UserRepository;
+import com.example.geospatial.requests.RegisterRequest;
 import com.example.geospatial.services.UserService;
 
 import jakarta.transaction.Transactional;
@@ -30,10 +31,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
 	@Override
-	public ResponseEntity<?> saveUser(User user) {
-        if (userRepository.findById(user.getEmail()).isPresent()) {
+	public ResponseEntity<?> saveUser(RegisterRequest registerRequest) {
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("User already exists!");
-}
+        }
+        User user = new User(registerRequest.getFirstname(),
+         registerRequest.getLastname(),
+         registerRequest.getEmail(),
+         registerRequest.getPassword());
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);	
@@ -43,14 +48,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	@Transactional
 	public boolean isUserPresent(User user) {
-		Optional<User> storedUser = userRepository.findById(user.getEmail());
+		Optional<User> storedUser = userRepository.findById(user.getId());
 		return storedUser.isPresent();
 	}
 
-	// Method defined in Spring Security UserDetailsService interface
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findById(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND " + email));
         return new CustomUserDetails(user);
     }

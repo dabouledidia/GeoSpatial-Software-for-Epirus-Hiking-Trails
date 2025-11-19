@@ -3,10 +3,13 @@ package com.example.geospatial.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -16,8 +19,11 @@ import jakarta.persistence.Table;
 public class User {
 
     @Id
-    @Column(name = "email")
-	private String email;  
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false )
+    private String email;  
 
     @Column(name = "first_name")
 	private String firstname;
@@ -34,19 +40,29 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Trail> trails = new ArrayList<>();
+
 
     public User(){}
 
-    public User(String firstname, String lastname, String email, String password, String role) {
+    public User(String firstname, String lastname, String email, String password) {
         super();
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.role = role;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getFirstname() {
         return firstname;
     }
@@ -85,6 +101,14 @@ public class User {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public List<Trail> getUserTrails() {
+        return trails; 
+    }
+
+    public void setUserTrails(List<Trail> trails) {
+        this.trails = trails;
     }
 
     public String getRole() {

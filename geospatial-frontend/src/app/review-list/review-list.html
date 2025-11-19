@@ -13,8 +13,8 @@
         <tr *ngFor = "let review of reviews">
             <td> {{review.rating}} </td>
             <td> {{review.comment}} </td>
-            <td> {{review.date}} </td>
-            <td> {{review.userId}} </td>
+            <td> {{review.createdAt}} </td>
+            <td> {{review.userEmail}} </td>
         </tr>
     </tbody>
 </table>

@@ -43,12 +43,13 @@ public class ReviewController {
 
         User user = currentUser.getUser();
 
-        return ResponseEntity.ok().body(reviewServiceImpl.addReview(
+        reviewServiceImpl.addReview(
             reviewRequest.getRating(),
             reviewRequest.getComment(),
             trail,
             user
-        ));
+        );
+        return ResponseEntity.ok().body("Review added");
     }
     
     @PreAuthorize("hasRole('USER')")    

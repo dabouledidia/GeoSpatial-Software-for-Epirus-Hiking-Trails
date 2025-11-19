@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
+import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.Trail;
 
 public interface TrailService {
@@ -12,10 +13,12 @@ public interface TrailService {
 
     public Optional<Trail> getTrail(long id);
 
-    public List<Trail> getAllTrail();
+    public List<TrailDTO> getAllTrail();
 
     public ResponseEntity<?> updateTrail(Trail trail);
 
     public ResponseEntity<?> deleteTrail(long id);
+
+    // public List<Trail> getUserTrail(String email);
 
 }

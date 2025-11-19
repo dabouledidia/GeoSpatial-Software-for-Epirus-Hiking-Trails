@@ -8,16 +8,20 @@
             <th>Duration</th>
             <th>Difficulty</th>
             <th>Description</th>
+            <th>User Id</th>
+
         </tr>
     </thead>
     <tbody>
         <tr *ngFor = "let trail of trails">
-            <td> {{trail.name}} </td>
+            <td> {{trail.trailName}} </td>
             <td> {{trail.location}} </td>
             <td> {{trail.lengthKm}} </td>
             <td> {{trail.duration}} </td>
             <td> {{trail.difficulty}} </td>
             <td> {{trail.description}} </td>
+            <td> {{trail.email}} </td>
+
             <td>
                 <button (click)="deleteTrail(trail.id!)" class="btn btn-danger"> Delete</button>
             </td>
