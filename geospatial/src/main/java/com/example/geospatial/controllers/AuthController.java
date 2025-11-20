@@ -53,11 +53,10 @@ public class AuthController {
 
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-            String token = jwtService.generateJwt(userDetails.getUsername());
+            String token = jwtService.generateJwt(userDetails);
 
             return ResponseEntity.ok(Map.of(
                 "email", loginRequest.getEmail(),
-                "tokenValid", false,
                 "authValid", true,
                 "mfaRequired", false,
                 "message", "User authenticated using email and password",

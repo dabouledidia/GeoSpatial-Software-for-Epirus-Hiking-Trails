@@ -34,7 +34,14 @@ private apiUrl = 'http://localhost:8080/';
     }
 
     createTrail(trail: FormData): Observable<any> {
-      return this.http.post(this.apiUrl + "createTrail", trail); 
+      const token = localStorage.getItem('token');
+
+      return this.http.post(this.apiUrl + "createTrail", trail, {
+        
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
     }
 
     deleteTrail(id: number): Observable<Object>{

@@ -1,6 +1,7 @@
 package com.example.geospatial.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,30 +51,35 @@ public class TrailController {
         } 
     }
 
-    // @GetMapping("/user_trails")
-    // public ResponseEntity<?> getUserTrail(@AuthenticationPrincipal CustomUserDetails currentUser){
-    //     try {
-    //         User user = currentUser.getUser();
-    //         return ResponseEntity.ok(trailServiceImpl.getUserTrail(user.getEmail()));
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseEntity.internalServerError().body("something went wrong with get all trails");
-    //     } 
-    // }
+    @GetMapping("/user_trails")
+    public ResponseEntity<?> getUserTrail(@AuthenticationPrincipal CustomUserDetails currentUser){
+        try {
+            User user = currentUser.getUser();
+            List<TrailDTO> trails = trailServiceImpl.getUserTrail(user);
+            return ResponseEntity.ok(trails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("something went wrong with get all trails");
+        } 
+    }
     
     @PreAuthorize("hasRole('USER')")    
     @PostMapping("/createTrail")
-    public ResponseEntity<?> createTrail(@Validated @RequestBody Trail trail, @AuthenticationPrincipal CustomUserDetails currentUser){
+    public ResponseEntity<Map<String,String>> createTrail(
+            @Validated @RequestBody Trail trail,
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
             User user = currentUser.getUser();
             trail.setUser(user);
             trailServiceImpl.createTrail(trail);
-            return ResponseEntity.ok().body("Created!");
+            return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with trail create");
+            return ResponseEntity.internalServerError()
+                                .body(Map.of("message", "Something went wrong with trail create"));
         } 
     }
+
 
     @PreAuthorize("hasRole('USER')")    
     @PutMapping("/updateTrail")

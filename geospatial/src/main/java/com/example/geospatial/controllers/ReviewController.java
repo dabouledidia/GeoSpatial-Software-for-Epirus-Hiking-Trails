@@ -2,6 +2,7 @@ package com.example.geospatial.controllers;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class ReviewController {
     private TrailRepository trailRepository;
 
     @PostMapping("/add/{trailId}")
-    public ResponseEntity<?> addReview(
+    public ResponseEntity<Map<String,String>> addReview(
             @PathVariable Long trailId,
             @RequestBody ReviewRequest reviewRequest,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
@@ -49,7 +50,7 @@ public class ReviewController {
             trail,
             user
         );
-        return ResponseEntity.ok().body("Review added");
+        return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
     }
     
     @PreAuthorize("hasRole('USER')")    

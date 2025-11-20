@@ -29,10 +29,14 @@ constructor(
     description: ['', Validators.required],
   })
 }
+
 createTrail(): void {
   if (this.trailForm.invalid) return
 
-  this.trailService.createTrail(this.trailForm.value)
+  this.trailService.createTrail(this.trailForm.value).subscribe({
+    next: (res) => console.log("Trail created:", res),
+    error: (err) => console.error("Error:", err)
+  });
     this.router.navigate(['']);
   
 }

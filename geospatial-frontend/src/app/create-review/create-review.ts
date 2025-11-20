@@ -28,7 +28,10 @@ export class CreateReview implements OnInit{
       comment: this.comment
     };
 
-    this.reviewService.addReview(this.trailId, reviewData)
+    this.reviewService.addReview(this.trailId, reviewData).subscribe({
+    next: (res) => console.log("Trail created:", res),
+    error: (err) => console.error("Error:", err)
+  });
      alert('Review added successfully!'),
     this.router.navigate(["trail-list"]);
   }

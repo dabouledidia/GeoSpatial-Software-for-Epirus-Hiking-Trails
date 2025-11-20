@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.Trail;
+import com.example.geospatial.models.User;
 
 public interface TrailService {
     public ResponseEntity<?> createTrail(Trail trail);
@@ -19,6 +20,6 @@ public interface TrailService {
 
     public ResponseEntity<?> deleteTrail(long id);
 
-    // public List<Trail> getUserTrail(String email);
+    public List<TrailDTO> getUserTrail(User user);
 
 }
