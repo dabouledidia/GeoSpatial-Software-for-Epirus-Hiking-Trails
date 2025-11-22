@@ -25,6 +25,7 @@ export class Register {
 
   register(): void {  
   this.userService.register(this.userRegister)
+  this.router.navigate(["/register"]);
   };
 
 }

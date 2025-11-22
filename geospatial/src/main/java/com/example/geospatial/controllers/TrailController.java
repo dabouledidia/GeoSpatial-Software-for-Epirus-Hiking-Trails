@@ -1,8 +1,12 @@
 package com.example.geospatial.controllers;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.geospatial.DTO.TrailDTO;
+import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.Trail;
+import com.example.geospatial.models.User;
 import com.example.geospatial.services.TrailService;
 
 @RestController
@@ -36,7 +43,20 @@ public class TrailController {
     @GetMapping("/all_trails")
     public ResponseEntity<?> getAllTrail(){
         try {
-            return ResponseEntity.ok(trailServiceImpl.getAllTrail());
+            List<TrailDTO> trails = trailServiceImpl.getAllTrail();
+            return ResponseEntity.ok(trails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("something went wrong with get all trails");
+        } 
+    }
+
+    @GetMapping("/user_trails")
+    public ResponseEntity<?> getUserTrail(@AuthenticationPrincipal CustomUserDetails currentUser){
+        try {
+            User user = currentUser.getUser();
+            List<TrailDTO> trails = trailServiceImpl.getUserTrail(user);
+            return ResponseEntity.ok(trails);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("something went wrong with get all trails");
@@ -45,15 +65,23 @@ public class TrailController {
     
     @PreAuthorize("hasRole('USER')")    
     @PostMapping("/createTrail")
-    public ResponseEntity<?> createTrail(@Validated @RequestBody Trail trail){
+    public ResponseEntity<Map<String,String>> createTrail(
+            @Validated @RequestBody Trail trail,
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
-            return ResponseEntity.ok(trailServiceImpl.createTrail(trail));
+            User user = currentUser.getUser();
+            trail.setUser(user);
+            trailServiceImpl.createTrail(trail);
+            return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with trail create");
+            return ResponseEntity.internalServerError()
+                                .body(Map.of("message", "Something went wrong with trail create"));
         } 
     }
 
+
+    @PreAuthorize("hasRole('USER')")    
     @PutMapping("/updateTrail")
     public ResponseEntity<?> updateTrail(@Validated @RequestBody Trail trail){
         try {

@@ -3,6 +3,8 @@ package com.example.geospatial.models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +34,7 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trail_id")
+    @JsonIgnore
     private Trail trail;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,6 +51,14 @@ public class Review {
         this.user = user;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public int getRating() {
         return rating;
     }

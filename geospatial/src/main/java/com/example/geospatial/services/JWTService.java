@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 public interface JWTService {
-    String generateJwt(String email) throws ParseException;
+    String generateJwt(UserDetails userDetails) throws ParseException;
     String extractEmail(String token);
     boolean isTokenValid(String token, UserDetails userDetails);
 }

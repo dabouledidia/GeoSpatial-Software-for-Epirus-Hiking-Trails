@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Trail } from '../models/trail.model';
 import { TrailService } from '../services/trail.service';
 import { Router, RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',
 })
-export class TrailList {
+export class TrailList implements OnInit{
 
   trails: Trail[] = [];
 
@@ -26,11 +26,24 @@ export class TrailList {
     })
   }
 
+  getUserTrails(){
+    this.trailService.getUserTrails().subscribe((data: Trail[]) =>{
+      this.trails = data;
+    })
+  }
+
   deleteTrail(id: number){
     this.trailService.deleteTrail(id).subscribe(data =>{
       this.getTrails();
     })
+  }
 
+  createReview(id: number){
+    this.router.navigate([`create-review/${id}`])
+  }
+
+  getReviews(id: number){
+    this.router.navigate([`review-list/${id}`])
   }
 
 }

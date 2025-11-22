@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +13,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -44,15 +47,20 @@ public class Trail {
     @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrailImage> pathImages = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY )
+    @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
     public Trail(){}
 
-    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description) {
+    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description,  User user) {
                 super();
                 this.name = name;
                 this.location = location;
@@ -60,6 +68,7 @@ public class Trail {
                 this.duration = duration;
                 this.difficulty = difficulty;
                 this.description = description;
+                this.user = user;
 
     }
 
@@ -142,4 +151,14 @@ public class Trail {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    
 }

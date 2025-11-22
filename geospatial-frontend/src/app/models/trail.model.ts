@@ -1,9 +1,10 @@
 export interface Trail{
     id?: number;
-    name: string;
+    trailName: string;
     location: string,
     lengthKm: string,
     duration: string,
     difficulty: string,
-    description: string
+    description: string,
+    email: string
 }

@@ -2,7 +2,6 @@ package com.example.geospatial.config;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +17,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-    @Component
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JWTService jwtService;
+    private final JWTService jwtService;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private UserDetailsService userServiceImpl;
+    public JwtAuthenticationFilter(JWTService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -40,17 +41,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authHeader.substring(7);
-        String email = jwtService.extractEmail(token); 
-        
+        String jwt = authHeader.substring(7);
+        String email = jwtService.extractEmail(jwt);
+
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userServiceImpl.loadUserByUsername(email);
 
-            if (jwtService.isTokenValid(token, userDetails)) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities() 
+                        );
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
@@ -59,5 +68,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
-
