@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,7 +16,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.geospatial.services.servicesImpl.UserServiceImpl;
 
+
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final UserServiceImpl userServiceImpl;
@@ -46,10 +49,8 @@ public class WebSecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/login", "/register", "/signup", "/save").permitAll()
-                .requestMatchers("/reviews/**").authenticated()    
-                .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // .requestMatchers("/reviews/**").authenticated()    
+                // .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -6,7 +6,7 @@ import { UserServices } from '../services/user.services';
 @Component({
   selector: 'app-logout',
   imports: [ReactiveFormsModule, RouterModule],
-  providers: [UserServices],
+  providers: [],
   templateUrl: './logout.html',
   styleUrl: './logout.css',
 })

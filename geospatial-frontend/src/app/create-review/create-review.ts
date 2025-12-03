@@ -4,6 +4,7 @@ import { ReviewService } from '../services/review.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-create-review',
   standalone: true,
@@ -29,10 +30,9 @@ export class CreateReview implements OnInit{
     };
 
     this.reviewService.addReview(this.trailId, reviewData).subscribe({
-    next: (res) => console.log("Trail created:", res),
-    error: (err) => console.error("Error:", err)
+    next: (res) => alert("Created!!"),
+    error: (err) => alert("You have to login to create a review")
   });
-     alert('Review added successfully!'),
     this.router.navigate(["trail-list"]);
   }
 }

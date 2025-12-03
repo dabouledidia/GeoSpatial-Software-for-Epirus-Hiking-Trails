@@ -10,6 +10,7 @@ import { TrailList } from './trail-list/trail-list';
 import { Logout } from './logout/logout';
 import { CreateReview } from './create-review/create-review';
 import { ReviewList } from './review-list/review-list';
+import { UserManagement } from './user-management/user-management';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'main-page', pathMatch: 'full'},
@@ -20,7 +21,9 @@ export const routes: Routes = [
     {path: 'create-trail', component: CreateTrail},
     {path: 'create-review/:id', component: CreateReview},
     {path: 'review-list/:id', component: ReviewList},
-    {path: 'main-page', component: MainPage}
+    {path: 'review-list', component: ReviewList},
+    {path: 'main-page', component: MainPage},
+    {path: 'user-management', component: UserManagement}
 ];
 
 export const AppRoutes = provideRouter(routes);

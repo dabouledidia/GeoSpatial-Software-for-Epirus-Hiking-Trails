@@ -11,31 +11,23 @@ export class ReviewService {
   constructor(private http: HttpClient) {}
 
   addReview(trailId: number, reviewData: any): Observable<any> {
-      const token = localStorage.getItem('token');
-
-
       return this.http.post(
         `${this.apiUrl}/add/${trailId}`,
-        reviewData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        reviewData
       );
     }
 
 
 
   getReviews(trailId: number): Observable<any[]> {
-      const token = localStorage.getItem('token');
+      return this.http.get<any[]>(`${this.apiUrl}/reviews/${trailId}`);
+    }
 
-      return this.http.get<any[]>(`${this.apiUrl}/reviews/${trailId}`,
-      {
-        headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-      });
+    deleteReview(reviewId: number): Observable<Object>{
+      return this.http.delete(this.apiUrl+ "/deleteReview/"+ reviewId);
+    }
+
+    getUserReviews(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/userReviews`);
     }
 }

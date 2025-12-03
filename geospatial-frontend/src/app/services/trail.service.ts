@@ -14,34 +14,19 @@ private apiUrl = 'http://localhost:8080/';
     getTrails(): Observable<any[]>{
         const token = localStorage.getItem('token');
 
-        return this.http.get<any[]>(this.apiUrl + "all_trails",{
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    });
+        return this.http.get<any[]>(this.apiUrl + "all_trails")
     }
 
     getUserTrails(): Observable<any[]>{
         const token = localStorage.getItem('token');
 
-        return this.http.get<any[]>(this.apiUrl + "user_trails",{
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
+        return this.http.get<any[]>(this.apiUrl + "user_trails")
     }
 
     createTrail(trail: FormData): Observable<any> {
       const token = localStorage.getItem('token');
 
-      return this.http.post(this.apiUrl + "createTrail", trail, {
-        
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      return this.http.post(this.apiUrl + "createTrail", trail)
     }
 
     deleteTrail(id: number): Observable<Object>{

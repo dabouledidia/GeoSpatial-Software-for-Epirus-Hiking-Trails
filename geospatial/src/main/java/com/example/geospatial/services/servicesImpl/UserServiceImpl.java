@@ -1,8 +1,9 @@
 package com.example.geospatial.services.servicesImpl;
 
+import java.util.List;
 import java.util.Optional;
 
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.geospatial.DTO.UserDAO;
 import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.User;
 import com.example.geospatial.repositories.UserRepository;
@@ -59,5 +61,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new CustomUserDetails(user);
     }
 	
+    @Override
+    public List<UserDAO> getAllUsers(){
+        List<User> users = userRepository.findAll();
+
+        return users.stream().map(r ->
+        new UserDAO(
+            r.getId(),
+            r.getEmail(),
+            r.getFirstname(),
+            r.getLastname(),
+            r.getRole()
+        )).toList();
+    }
+
+
+    @Override
+    public ResponseEntity<?> deleteUser(long id) {
+        Optional<User> existingUserOpt = userRepository.findById(id);
+
+        if (existingUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with id " + id + " not found");
+        }
+
+        userRepository.deleteById(id);
         
+        return ResponseEntity.ok("Deleted!");
+    }
 }

@@ -63,7 +63,7 @@ public class TrailController {
         } 
     }
     
-    @PreAuthorize("hasRole('USER')")    
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PostMapping("/createTrail")
     public ResponseEntity<Map<String,String>> createTrail(
             @Validated @RequestBody Trail trail,
@@ -81,7 +81,7 @@ public class TrailController {
     }
 
 
-    @PreAuthorize("hasRole('USER')")    
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PutMapping("/updateTrail")
     public ResponseEntity<?> updateTrail(@Validated @RequestBody Trail trail){
         try {
@@ -92,7 +92,7 @@ public class TrailController {
         } 
     }
     
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/deleteTrail/{id}")
     public ResponseEntity<?> deleteTrail(@Validated @PathVariable long id){
         try {
