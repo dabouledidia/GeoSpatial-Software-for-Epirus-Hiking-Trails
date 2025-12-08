@@ -1,8 +1,11 @@
 package com.example.geospatial.services.servicesImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.geospatial.DTO.ReviewDTO;
@@ -38,5 +41,35 @@ public class ReviewServiceImpl implements ReviewService{
         )
     ).toList();
     }
+
+    @Override
+    public List<ReviewDTO> getUserReviews(User user) {
+        List<Review> reviews = reviewRepository.findByUserId(user.getId());
+        return reviews.stream().map(r ->
+        new ReviewDTO(
+            r.getId(),
+            r.getRating(),
+            r.getComment(),
+            r.getCreatedAt().toString(),
+            r.getUser().getEmail(),
+            r.getTrail().getId()
+        )
+        ).toList();    
+    }
+
+    @Override
+    public ResponseEntity<?> deleteReview(Long reviewId) {
+        Optional<Review> existingReviewOpt = reviewRepository.findById(reviewId);
+        
+        if (existingReviewOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Review with id " + reviewId + " not found");
+        }
+
+        reviewRepository.deleteById(reviewId);
+        
+        return ResponseEntity.ok("Deleted!");
+    }
+
 
 }

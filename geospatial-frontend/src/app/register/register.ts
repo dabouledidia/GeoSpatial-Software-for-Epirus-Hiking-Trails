@@ -6,7 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, RouterModule],
-  providers: [UserServices],
+  providers: [],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

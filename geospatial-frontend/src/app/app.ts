@@ -17,4 +17,8 @@ export class App {
   logout() {
     this.userService.logout();
   }
+
+  getRole(){
+    this.userService.getRole();
+  }
 }

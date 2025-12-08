@@ -3,11 +3,12 @@ import { Trail } from '../models/trail.model';
 import { TrailService } from '../services/trail.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserServices } from '../services/user.services';
 
 @Component({
   selector: 'app-trail-list',
   imports: [CommonModule, RouterModule],
-  providers: [TrailService],
+  providers: [],
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',
 })
@@ -15,7 +16,7 @@ export class TrailList implements OnInit{
 
   trails: Trail[] = [];
 
-  constructor(private trailService: TrailService, private router: Router){}
+  constructor(public userService: UserServices, private trailService: TrailService, private router: Router){}
   ngOnInit(): void {
     this.getTrails();
   }

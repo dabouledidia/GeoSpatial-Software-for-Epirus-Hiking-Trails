@@ -4,10 +4,11 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router, RouterModule } from '@angular/router';
 import { TrailService } from '../services/trail.service';
 
+
 @Component({
   selector: 'app-create-trail',
   imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule],
-  providers: [TrailService],
+  providers: [],
   templateUrl: './create-trail.html',
   styleUrl: './create-trail.css',
 })

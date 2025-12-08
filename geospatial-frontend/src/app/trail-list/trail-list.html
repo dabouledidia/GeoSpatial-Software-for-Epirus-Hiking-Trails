@@ -24,7 +24,14 @@
             <td> {{trail.email}} </td>
 
             <td>
-                <button (click)="deleteTrail(trail.id!)" class="btn btn-danger"> Delete</button>
+                    <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_ADMIN'">
+                    <button (click)="deleteTrail(trail.id!)" class="btn btn-danger"> Delete</button>
+                    </div>
+                    <div class="nav-item" *ngIf="userService.getUser() === trail.email">
+                        <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_USER'">
+                            <button (click)="deleteTrail(trail.id!)" class="btn btn-danger"> Delete</button>
+                    </div>
+                </div>
             </td>
             <td>
                 <button (click)="createReview(trail.id!)" class="btn btn-primary"> Create Review</button>

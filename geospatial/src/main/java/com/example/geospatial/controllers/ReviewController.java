@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,10 +51,9 @@ public class ReviewController {
             trail,
             user
         );
-        return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
+        return ResponseEntity.ok(Map.of("message", "Review created successfully"));
     }
     
-    @PreAuthorize("hasRole('USER')")    
     @GetMapping("/reviews/{trailId}")
     public ResponseEntity<?> getReviewsByTrail(@PathVariable Long trailId) {
         try{
@@ -62,6 +62,31 @@ public class ReviewController {
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("something went wrong with get all reviews by trail id");
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/userReviews")
+    public ResponseEntity<?> getUserReviews(@AuthenticationPrincipal CustomUserDetails currentUser){
+       try{
+        User user = currentUser.getUser();
+        List<ReviewDTO> reviews = reviewServiceImpl.getUserReviews(user);
+        return ResponseEntity.ok(reviews);
+       }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("something went wrong with get user reviews");
+        }
+            
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @DeleteMapping("/deleteReview/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId){
+        try {
+            return ResponseEntity.ok(reviewServiceImpl.deleteReview(reviewId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("something went wrong with delete review");
         }
     }
 }

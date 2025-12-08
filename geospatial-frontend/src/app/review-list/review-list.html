@@ -1,4 +1,6 @@
 <h2> Reviews</h2>
+<button (click)="getUserReviews()" >My Reviews List</button>
+
 <table class = "table table-striped">
     <thead>
         <tr>
@@ -6,6 +8,7 @@
             <th>Comment</th>
             <th>Date</th>
             <th>User Id</th>
+            <th>Trail Id</th>
 
         </tr>
     </thead>
@@ -15,6 +18,20 @@
             <td> {{review.comment}} </td>
             <td> {{review.createdAt}} </td>
             <td> {{review.userEmail}} </td>
+            <td> {{review.trailId}} </td>
+            <td>
+                <div class="nav-item" *ngIf="userService.isLoggedIn()">
+                    <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_ADMIN'">
+                        <button (click)="deleteReview(review.id!)" class="btn btn-danger"> Delete</button>
+                    </div>
+                </div>
+                <div class="nav-item" *ngIf="userService.getUser() === review.userEmail">
+                    <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_USER'">
+                        <button (click)="deleteReview(review.id!)" class="btn btn-danger"> Delete</button>
+                    </div>
+                </div>
+
+            </td>
         </tr>
     </tbody>
 </table>

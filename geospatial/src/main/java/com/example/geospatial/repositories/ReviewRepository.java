@@ -10,4 +10,5 @@ import com.example.geospatial.models.Review;
 
 @Repository 
 public interface ReviewRepository extends JpaRepository<Review, Long>{
-    List<Review> findByTrailId(Long trailId);}
+    List<Review> findByTrailId(Long trailId);
+    List<Review> findByUserId(Long userId);}
