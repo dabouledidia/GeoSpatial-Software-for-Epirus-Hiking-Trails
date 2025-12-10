@@ -1,37 +1,59 @@
-<h2> Reviews</h2>
-<button (click)="getUserReviews()" >My Reviews List</button>
+<h2>Reviews</h2>
 
-<table class = "table table-striped">
-    <thead>
+<button (click)="getUserReviews()" class="btn btn-primary">
+    My Reviews List
+</button>
+
+<p-table [value]="reviews" [tableStyle]="{ 'min-width': '50rem' }">
+
+    <ng-template pTemplate="header">
         <tr>
             <th>Rating</th>
             <th>Comment</th>
             <th>Date</th>
-            <th>User Id</th>
+            <th>User Email</th>
             <th>Trail Id</th>
-
         </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor = "let review of reviews">
-            <td> {{review.rating}} </td>
-            <td> {{review.comment}} </td>
-            <td> {{review.createdAt}} </td>
-            <td> {{review.userEmail}} </td>
-            <td> {{review.trailId}} </td>
-            <td>
-                <div class="nav-item" *ngIf="userService.isLoggedIn()">
-                    <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_ADMIN'">
-                        <button (click)="deleteReview(review.id!)" class="btn btn-danger"> Delete</button>
-                    </div>
-                </div>
-                <div class="nav-item" *ngIf="userService.getUser() === review.userEmail">
-                    <div class="nav-item" *ngIf="userService.getRole() === 'ROLE_USER'">
-                        <button (click)="deleteReview(review.id!)" class="btn btn-danger"> Delete</button>
-                    </div>
-                </div>
+    </ng-template>
 
+    <ng-template pTemplate="body" let-review>
+        <tr>
+            
+            <td>
+            <p-rating [(ngModel)]="review.rating" [readonly]="true"></p-rating>
+            </td>
+            <td>
+                {{ review.comment.length > 10 ? (review.comment | slice:0:10) + '...' : review.comment }}
+                <a href="#" (click)="showFullComment(review.comment); $event.preventDefault()">[more]</a>
+            </td>
+
+            <td>{{ review.createdAt }}</td>
+            <td>{{ review.userEmail }}</td>
+            <td>{{ review.trailId }}</td>
+
+            <td>
+                <button
+                    *ngIf="userService.getRole() === 'ROLE_ADMIN'"
+                    class="btn btn-danger"
+                    (click)="deleteReview(review.id!)">
+                    Delete
+                </button>
+
+                <button
+                    *ngIf="userService.getRole() === 'ROLE_USER' && userService.getUser() === review.userEmail"
+                    class="btn btn-danger"
+                    (click)="deleteReview(review.id!)">
+                    Delete
+                </button>
             </td>
         </tr>
-    </tbody>
-</table>
+    </ng-template>
+
+</p-table>
+
+<p-dialog header="Full Comment"
+          [(visible)]="displayCommentDialog"
+          [style]="{width: '30vw'}">
+    <p>{{ fullComment }}</p>
+</p-dialog>
+

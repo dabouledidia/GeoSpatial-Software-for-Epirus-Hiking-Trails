@@ -1,3 +1,35 @@
-<p>Welcome to Main Page</p>
+<div class="mb-4 p-8">
+    <p-card header="Welcome To Geospatial-Software for Epirus Hiking Trails!">
+        <p class="m-0">
+            Provided by @dtsantas
+        </p>
+    </p-card>
+</div>
 
-<a routerLink="/create-trail"> create trail</a>
+
+
+<p-card [style]="{ width: '25rem'}">
+    <ng-template #header>
+        <img alt="Card" class="w-full" src="https://thru-hiking.com/wp-content/uploads/2022/11/IMG_0410-1.jpeg" />
+    </ng-template>
+    <ng-template #title> <a routerLink="/trail-list"> See All Trails</a> </ng-template>
+    <ng-template #subtitle> Trails around Epirus </ng-template>
+    <p>
+       Looking forward to explore trails around Epirus? This is the right place!
+    </p>
+    <ng-template #footer>
+    </ng-template>
+</p-card>
+
+<p-card [style]="{ width: '25rem'}">
+    <ng-template #header>
+        <img alt="Card" class="w-full" src="https://caverntours.com/wp-content/uploads/2021/08/how-to-make-trails-in-the-woods.jpg" />
+    </ng-template>
+    <ng-template #title> <a routerLink="/create-trail"> Create A Trail</a> </ng-template>
+    <ng-template #subtitle> Create your trail near epirus </ng-template>
+    <p>
+       Add your favourite trails so other people can visit and see what you saw!
+    </p>
+    <ng-template #footer>
+    </ng-template>
+</p-card>
