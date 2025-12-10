@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReviewService } from '../services/review.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RatingModule } from 'primeng/rating';
+import { ButtonModule } from 'primeng/button';
 
 
 @Component({
   selector: 'app-create-review',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RatingModule, ButtonModule],
   templateUrl: './create-review.html',
   styleUrl: './create-review.css',
 })
