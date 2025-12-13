@@ -1,6 +1,7 @@
 package com.example.geospatial.services.servicesImpl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -78,15 +79,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public ResponseEntity<?> deleteUser(long id) {
-        Optional<User> existingUserOpt = userRepository.findById(id);
+            if (!userRepository.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "User with id " + id + " not found"));
+            }
 
-        if (existingUserOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with id " + id + " not found");
+            userRepository.deleteById(id);
+            
+            return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
         }
-
-        userRepository.deleteById(id);
-        
-        return ResponseEntity.ok("Deleted!");
-    }
 }

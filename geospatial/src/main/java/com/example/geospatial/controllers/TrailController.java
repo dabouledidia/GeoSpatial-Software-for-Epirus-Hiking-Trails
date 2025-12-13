@@ -3,6 +3,8 @@ package com.example.geospatial.controllers;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,17 +28,18 @@ import com.example.geospatial.services.TrailService;
 @RestController
 public class TrailController {
     
+    private static final Logger logger = LoggerFactory.getLogger(TrailController.class);
+
     @Autowired
     private TrailService trailServiceImpl;
-
 
     @GetMapping("/trail_by_id")
     public ResponseEntity<?> getTrail(@Validated @RequestParam long id){
         try {
             return ResponseEntity.ok(trailServiceImpl.getTrail(id));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with trail find by id");
+            logger.error("Error fetching trail with id: {}", id, e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to fetch trail."));
         } 
     }
 
@@ -46,8 +49,8 @@ public class TrailController {
             List<TrailDTO> trails = trailServiceImpl.getAllTrail();
             return ResponseEntity.ok(trails);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with get all trails");
+            logger.error("Error fetching all trails", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to fetch trails."));
         } 
     }
 
@@ -58,14 +61,14 @@ public class TrailController {
             List<TrailDTO> trails = trailServiceImpl.getUserTrail(user);
             return ResponseEntity.ok(trails);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with get all trails");
+            logger.error("Error fetching user trails", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to fetch user trails."));
         } 
     }
     
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PostMapping("/createTrail")
-    public ResponseEntity<Map<String,String>> createTrail(
+    public ResponseEntity<?> createTrail(
             @Validated @RequestBody Trail trail,
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
@@ -74,12 +77,10 @@ public class TrailController {
             trailServiceImpl.createTrail(trail);
             return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError()
-                                .body(Map.of("message", "Something went wrong with trail create"));
+            logger.error("Error creating trail", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to create trail."));
         } 
     }
-
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PutMapping("/updateTrail")
@@ -87,8 +88,8 @@ public class TrailController {
         try {
             return ResponseEntity.ok(trailServiceImpl.updateTrail(trail));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with trail update");
+            logger.error("Error updating trail id: {}", trail.getId(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to update trail."));
         } 
     }
     
@@ -98,9 +99,8 @@ public class TrailController {
         try {
             return ResponseEntity.ok(trailServiceImpl.deleteTrail(id));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("something went wrong with delete trail");
+            logger.error("Error deleting trail id: {}", id, e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to delete trail."));
         } 
     }
-
 }
