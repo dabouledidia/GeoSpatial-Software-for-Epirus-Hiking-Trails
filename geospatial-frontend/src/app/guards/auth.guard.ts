@@ -6,7 +6,7 @@ export const authGuard = () => {
   
   // Check if the JWT token exists in local storage
   // (Ensure this matches the key you use in your Login component)
-  const token = localStorage.getItem('jwt'); 
+  const token = localStorage.getItem('token'); 
 
   if (token) {
     return true;
