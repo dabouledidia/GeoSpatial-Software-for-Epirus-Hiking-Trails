@@ -45,13 +45,7 @@
         </ng-container>
 
         <ng-template #loggedIn>
-
-          <li class="nav-item me-2">
-            <a class="btn btn-light text-primary fw-bold" routerLink="/profile">
-              <i class="bi bi-person-circle"></i> Profile
-            </a>
-          </li>
-
+          
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">
               {{ getUsername() }}
@@ -60,6 +54,9 @@
             <ul class="dropdown-menu dropdown-menu-end">
               <li><hr class="dropdown-divider"></li>
               <li>
+                 <a class="btn btn-light text-primary fw-bold" routerLink="/profile">
+              <i class="bi bi-person-circle"></i> Profile
+            </a>
                 <a class="dropdown-item text-danger" href="#" (click)="logout()">
                   <i class="bi bi-box-arrow-right"></i> Logout
                 </a>

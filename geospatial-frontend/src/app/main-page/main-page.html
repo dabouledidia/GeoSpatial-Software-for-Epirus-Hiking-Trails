@@ -1,8 +1,6 @@
 <div class="mb-4 p-8">
     <p-card header="Welcome To Geospatial-Software for Epirus Hiking Trails!">
-        <p class="m-0">
-            Provided by @dtsantas
-        </p>
+
     </p-card>
 </div>
 
@@ -33,3 +31,48 @@
     <ng-template #footer>
     </ng-template>
 </p-card>
+
+
+<div class="footer flex flex-column align-items-center gap-2 p-4">
+    
+     <div class="flex justify-content-center text-sm">
+        <a (click)="showAbout()" class="cursor-pointer mx-2">About Us</a>
+        <a (click)="showPrivacy()" class="cursor-pointer mx-2">Privacy Policy</a>
+        <a (click)="showTerms()" class="cursor-pointer mx-2">Terms of Service</a>
+    </div>
+
+    <div class="text-sm text-500 mx-3">
+         © 2026 Provided by @dtsantas
+    </div>
+
+</div>
+
+<p-dialog header="About Us" [modal]="true" [(visible)]="aboutVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <p class="mb-4">
+        Information about the application.
+    </p>
+
+</p-dialog>
+
+<p-dialog header="Privacy Policy" [modal]="true" [(visible)]="privacyVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <p>
+        Your privacy policy text here.
+    </p>
+
+</p-dialog>
+
+<p-dialog header="Terms of Service" [modal]="true" [(visible)]="termsVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <p>
+        Your terms of service text here.
+    </p>
+
+</p-dialog>
