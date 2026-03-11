@@ -13,6 +13,7 @@ import { ReviewList } from './review-list/review-list';
 import { UserManagement } from './user-management/user-management';
 // Import the guard
 import { authGuard } from './guards/auth.guard'; 
+import { Profile } from './profile/profile';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'main-page', pathMatch: 'full'},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     
     // Protected Routes (Apply canActivate)
     {path: 'logout', component: Logout, canActivate: [authGuard]},
+    {path: 'profile', component: Profile, canActivate: [authGuard]},
     {path: 'create-trail', component: CreateTrail, canActivate: [authGuard]},
     {path: 'create-review/:id', component: CreateReview, canActivate: [authGuard]},
     {path: 'user-management', component: UserManagement, canActivate: [authGuard]}

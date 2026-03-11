@@ -14,11 +14,29 @@
                 </div>
                 <div class="mb-3">
                     <label for="lengthKm" class="form-label">Length (Km)</label>
-                    <input type="text" id="lengthKm" class="form-control" formControlName="lengthKm" required>
+                    <input type="number" id="lengthKm" class="form-control" formControlName="lengthKm" required>
+                    <div
+                        *ngIf="
+                        trailForm.get('lengthKm')?.invalid &&
+                        trailForm.get('lengthKm')?.touched
+                        "
+                        class="text-danger mt-1"
+                    >
+                        Please enter a valid number (e.g. 5.5 km)
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="duration" class="form-label">Duration</label>
-                    <input type="text" id="duration" class="form-control" formControlName="duration" required>
+                    <input type="number" id="duration" class="form-control" formControlName="duration" required>
+                    <div
+                        *ngIf="
+                        trailForm.get('duration')?.invalid &&
+                        trailForm.get('duration')?.touched  
+                        "
+                        class="text-danger mt-1"
+                    >
+                        Duration must be a positive number
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="difficulty" class="form-label">Difficulty</label>

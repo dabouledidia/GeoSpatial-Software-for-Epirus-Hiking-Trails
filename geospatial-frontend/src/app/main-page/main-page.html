@@ -1,3 +1,150 @@
-<p>Welcome to Main Page</p>
+<div class="mb-4 p-8">
+    <p-card header="Welcome To Geospatial-Software for Epirus Hiking Trails!">
 
-<a routerLink="/create-trail"> create trail</a>
+    </p-card>
+</div>
+
+
+
+<p-card [style]="{ width: '25rem'}">
+    <ng-template #header>
+        <img alt="Card" class="w-full" src="https://thru-hiking.com/wp-content/uploads/2022/11/IMG_0410-1.jpeg" />
+    </ng-template>
+    <ng-template #title> <a routerLink="/trail-list"> See All Trails</a> </ng-template>
+    <ng-template #subtitle> Trails around Epirus </ng-template>
+    <p>
+       Looking forward to explore trails around Epirus? This is the right place!
+    </p>
+    <ng-template #footer>
+    </ng-template>
+</p-card>
+
+<p-card [style]="{ width: '25rem'}">
+    <ng-template #header>
+        <img alt="Card" class="w-full" src="https://caverntours.com/wp-content/uploads/2021/08/how-to-make-trails-in-the-woods.jpg" />
+    </ng-template>
+    <ng-template #title> <a routerLink="/create-trail"> Create A Trail</a> </ng-template>
+    <ng-template #subtitle> Create your trail near epirus </ng-template>
+    <p>
+       Add your favourite trails so other people can visit and see what you saw!
+    </p>
+    <ng-template #footer>
+    </ng-template>
+</p-card>
+
+
+<div class="footer flex flex-column align-items-center gap-2 p-4">
+    
+     <div class="flex justify-content-center text-sm">
+        <a (click)="showAbout()" class="cursor-pointer mx-2">About Us</a>
+        <a (click)="showPrivacy()" class="cursor-pointer mx-2">Privacy Policy</a>
+        <a (click)="showTerms()" class="cursor-pointer mx-2">Terms of Service</a>
+    </div>
+
+    <div class="text-sm text-500 mx-3">
+         © 2026 Provided by @dtsantas
+    </div>
+
+</div>
+
+<p-dialog header="About Us" [modal]="true" [(visible)]="aboutVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <p class="mb-4">
+ <p>
+This application was developed to provide users with a simple and efficient platform for managing and accessing information.
+</p>
+
+<h4>Our Mission</h4>
+<p>
+Our goal is to create user-friendly applications that help improve productivity and provide a smooth user experience.
+</p>
+
+<h4>Technology</h4>
+<p>
+This application was built using modern web technologies including Angular and PrimeNG to ensure performance, responsiveness, and accessibility.
+</p>
+
+<h4>Developer</h4>
+<p>
+This project was developed by @dtsantas as part of educational project.
+</p>
+
+</p-dialog>
+
+<p-dialog header="Privacy Policy" [modal]="true" [(visible)]="privacyVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+<h4>Information We Collect</h4>
+<p>
+We may collect basic information such as your username, email address, and account details when you register or use the application.
+</p>
+
+<h4>How We Use Your Information</h4>
+<p>
+Your information is used only to provide and improve the functionality of the application, including user authentication and account management.
+</p>
+
+<h4>Data Protection</h4>
+<p>
+We take reasonable measures to protect your information from unauthorized access, disclosure, or misuse.
+</p>
+
+<h4>Third-Party Services</h4>
+<p>
+This application may use third-party services that may collect information used to identify you.
+</p>
+
+<h4>Your Rights</h4>
+<p>
+You have the right to request access, correction, or deletion of your personal data.
+</p>
+
+<h4>Contact</h4>
+<p>
+If you have any questions regarding this Privacy Policy, please contact the application administrator.
+</p>
+
+</p-dialog>
+
+<p-dialog header="Terms of Service" [modal]="true" [(visible)]="termsVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <p>
+By using this application, you agree to the following terms and conditions.
+</p>
+
+<h4>Use of the Application</h4>
+<p>
+The application is provided for informational and demonstration purposes. Users agree to use the service responsibly and in compliance with applicable laws.
+</p>
+
+<h4>User Accounts</h4>
+<p>
+Users are responsible for maintaining the confidentiality of their account information and for all activities that occur under their account.
+</p>
+
+<h4>Prohibited Activities</h4>
+<p>
+Users agree not to misuse the service, attempt unauthorized access, or interfere with the functionality of the application.
+</p>
+
+<h4>Limitation of Liability</h4>
+<p>
+The application is provided "as is" without warranties of any kind. The developers are not responsible for any damages or losses resulting from the use of the service.
+</p>
+
+<h4>Changes to the Terms</h4>
+<p>
+We reserve the right to update or modify these Terms of Service at any time without prior notice.
+</p>
+
+<h4>Contact</h4>
+<p>
+If you have questions about these Terms, please contact the application administrator.
+</p>
+
+</p-dialog>

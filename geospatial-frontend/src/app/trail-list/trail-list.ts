@@ -4,10 +4,15 @@ import { TrailService } from '../services/trail.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserServices } from '../services/user.services';
+import { DataViewModule } from 'primeng/dataview';
+import { PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from 'primeng/button';
+
+
 
 @Component({
   selector: 'app-trail-list',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule],
   providers: [],
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',
@@ -47,4 +52,15 @@ export class TrailList implements OnInit{
     this.router.navigate([`review-list/${id}`])
   }
 
+  currentPage = 0;
+rowsPerPage = 5;
+
+paginatedTrails() {
+  const start = this.currentPage * this.rowsPerPage;
+  return this.trails.slice(start, start + this.rowsPerPage);
+}
+
+onPageChange(event: any) {
+  this.currentPage = event.page;
+}
 }

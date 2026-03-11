@@ -24,8 +24,20 @@ constructor(
   this.trailForm = this.fb.group({
     name: ['', Validators.required],
     location: ['', Validators.required],
-    lengthKm: ['', [Validators.required]],
-    duration: ['', Validators.required],
+    lengthKm: [
+    null,
+    [
+      Validators.required,
+      Validators.pattern(/^\d+(\.\d+)?$/)
+    ]
+  ],
+  duration: [
+    null,
+    [
+      Validators.required,
+      Validators.pattern(/^\d+$/)
+    ]
+  ],
     difficulty: ['', Validators.required],
     description: ['', Validators.required],
   })

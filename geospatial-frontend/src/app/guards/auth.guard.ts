@@ -1,17 +1,27 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  exp: number;
+}
 
 export const authGuard = () => {
   const router = inject(Router);
-  
-  // Check if the JWT token exists in local storage
-  // (Ensure this matches the key you use in your Login component)
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem('token');
 
-  if (token) {
-    return true;
+  if (!token) {
+    router.navigate(['/login']);
+    return false;
   }
 
+    const decoded = jwtDecode<JwtPayload>(token);
+
+    if (decoded.exp > Date.now() / 1000) {
+      return true;
+    }
+
+  localStorage.removeItem('token');
   router.navigate(['/login']);
   return false;
 };

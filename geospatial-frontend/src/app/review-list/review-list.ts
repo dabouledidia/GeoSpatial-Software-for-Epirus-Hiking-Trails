@@ -4,10 +4,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute,  Router, RouterModule } from '@angular/router';
 import { ReviewService } from '../services/review.service';
 import { UserServices } from '../services/user.services';
+import { TableModule } from 'primeng/table';
+import { RatingModule } from 'primeng/rating';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-review-list',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TableModule, RatingModule, FormsModule, DialogModule],
   providers: [],  templateUrl: './review-list.html',
   styleUrl: './review-list.css',
 })
@@ -44,6 +48,15 @@ export class ReviewList implements OnInit{
       this.reviews = this.reviews.filter(r => r.id !== reviewId);
   });
 }
+
+fullComment: string = '';
+displayCommentDialog: boolean = false;
+
+showFullComment(text: string) {
+  this.fullComment = text;
+  this.displayCommentDialog = true;
+}
+
   
 
 }
