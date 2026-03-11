@@ -48,22 +48,32 @@
           
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">
-              {{ getUsername() }}
+              <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />                       
+                    </button>
             </a>
 
             <ul class="dropdown-menu dropdown-menu-end">
               <li><hr class="dropdown-divider"></li>
               <li>
-                 <a class="btn btn-light text-primary fw-bold" routerLink="/profile">
+                 <a class="btn btn-light text-primary" routerLink="/profile">
               <i class="bi bi-person-circle"></i> Profile
             </a>
                 <a class="dropdown-item text-danger" href="#" (click)="logout()">
-                  <i class="bi bi-box-arrow-right"></i> Logout
+                  <i class="bi bi-box-arrow-right"></i> Log Out
                 </a>
+
+                <button pRipple 
+                    class="relative overflow-hidden w-full border-0 bg-transparent flex items-center gap-3 p-3 hover:bg-surface-100 dark:hover:bg-surface-800 cursor-pointer transition-colors duration-200">
+
+                    <p-avatar 
+                        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                        shape="circle">
+                    </p-avatar>
+                </button>
               </li>
             </ul>
           </li>
-
         </ng-template>
 
       </ul>

@@ -3,10 +3,12 @@ import { Component, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { UserServices } from './services/user.services';
 import { MenubarModule } from 'primeng/menubar';
+import { AvatarModule } from 'primeng/avatar';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, CommonModule, MenubarModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, MenubarModule, AvatarModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
