@@ -47,6 +47,15 @@
                     <input type="text" id="description" class="form-control" formControlName="description" required>
                 </div>
 
+                <p-fileupload
+                    mode="basic"
+                    chooseLabel="Choose"
+                    chooseIcon="pi pi-upload"
+                    name="file"
+                    accept="image/*"
+                    (onSelect)="onFileSelect($event)"
+                    ></p-fileupload>
+
                 <button type="submit" class="btn btn-primary" [disabled]="trailForm.invalid">
                     Add Trail
                 </button>

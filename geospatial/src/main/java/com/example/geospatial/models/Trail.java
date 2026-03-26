@@ -44,6 +44,9 @@ public class Trail {
     @Column(name = "description", length = 2000)
     private String description;
 
+    @Column(name = "image")
+    private String image;
+
     @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrailImage> pathImages = new ArrayList<>();
 
@@ -60,7 +63,7 @@ public class Trail {
 
     public Trail(){}
 
-    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description,  User user) {
+    public Trail(String name, String location, Double lengthKm, Double duration, String difficulty, String description,  User user, String image) {
                 super();
                 this.name = name;
                 this.location = location;
@@ -68,6 +71,7 @@ public class Trail {
                 this.duration = duration;
                 this.difficulty = difficulty;
                 this.description = description;
+                this.image = image;
                 this.user = user;
 
     }
@@ -128,6 +132,14 @@ public class Trail {
         this.description = description;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
     public List<TrailImage> getPathImage() {
         return pathImages;
     }

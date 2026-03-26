@@ -7,17 +7,19 @@ public class TrailRequest {
     private double duration;
     private String difficulty;
     private String description;
+    private String image;
 
     public TrailRequest(){}
 
     public TrailRequest(String name, String location, double lengthKm, double duration, String difficulty,
-            String description) {
+            String description, String image) {
         this.name = name;
         this.location = location;
         this.lengthKm = lengthKm;
         this.duration = duration;
         this.difficulty = difficulty;
         this.description = description;
+        this.image = image;
     }
     public String getName() {
         return name;
@@ -54,6 +56,12 @@ public class TrailRequest {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
 
 

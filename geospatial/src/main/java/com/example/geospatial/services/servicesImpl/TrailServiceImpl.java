@@ -46,7 +46,8 @@ public class TrailServiceImpl implements TrailService{
             r.getDuration(),
             r.getDifficulty(),
             r.getDescription(),
-            r.getUser().getEmail()
+            r.getUser().getEmail(),
+            r.getImage()
         )
     ).toList();
     }
@@ -63,7 +64,8 @@ public class TrailServiceImpl implements TrailService{
             r.getDuration(),
             r.getDifficulty(),
             r.getDescription(),
-            r.getUser().getEmail()
+            r.getUser().getEmail(),
+            r.getImage()
         )
     ).toList();
     }
@@ -85,6 +87,7 @@ public class TrailServiceImpl implements TrailService{
         existingTrail.setDuration(trail.getDuration());
         existingTrail.setDifficulty(trail.getDifficulty());
         existingTrail.setDescription(trail.getDescription());
+        existingTrail.setImage(trail.getImage());
 
         trailRepository.save(existingTrail);
 

@@ -3,16 +3,34 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TrailService } from '../services/trail.service';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+
+
 
 
 @Component({
   selector: 'app-create-trail',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule, FileUploadModule, ButtonModule, ToastModule],
   providers: [],
   templateUrl: './create-trail.html',
   styleUrl: './create-trail.css',
 })
+
+
+
 export class CreateTrail {
+  
+  onFileSelect(event: any) {
+  const file = event.files[0];
+
+  if (file) {
+    this.trailForm.patchValue({
+      image: file
+    });
+  }
+}
 
     trailForm!: FormGroup;
   
@@ -35,24 +53,40 @@ constructor(
     null,
     [
       Validators.required,
-      Validators.pattern(/^\d+$/)
+      Validators.pattern(/^\d+(\.\d+)?$/)
     ]
   ],
     difficulty: ['', Validators.required],
     description: ['', Validators.required],
+    image: [null, Validators.required]
+
   })
 }
 
 createTrail(): void {
-  if (this.trailForm.invalid) return
+  if (this.trailForm.invalid) return;
 
-  this.trailService.createTrail(this.trailForm.value).subscribe({
-    next: (res) => console.log("Trail created:", res),
+  const formValue = this.trailForm.value;
+
+  const formData = new FormData(); // ✅ δημιουργία
+
+  formData.append('name', formValue.name);
+  formData.append('location', formValue.location);
+  formData.append('lengthKm', formValue.lengthKm);
+  formData.append('duration', formValue.duration);
+  formData.append('difficulty', formValue.difficulty);
+  formData.append('description', formValue.description);
+  formData.append('image', formValue.image); // ✅ το file
+
+  this.trailService.createTrail(formData).subscribe({
+    next: (res) => {
+      console.log("Trail created:", res);
+      this.router.navigate(['']); // βάλε το εδώ
+    },
     error: (err) => console.error("Error:", err)
   });
-    this.router.navigate(['']);
-  
 }
 }
+
 
 

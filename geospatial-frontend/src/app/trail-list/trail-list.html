@@ -1,3 +1,33 @@
+<div style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
+
+    <p-card *ngFor="let trail of trails" [style]="{ width: '50rem' }">
+
+    <ng-template #header>
+      <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
+    </ng-template>
+
+    <ng-template #title>
+      <a [routerLink]="trail.trailName ">{{ trail.trailName }}</a>
+    </ng-template>
+
+<p><strong>Location:</strong> {{ trail.location }}</p>
+        <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
+        <p><strong>Duration:</strong> {{ trail.duration }} H</p>
+        <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
+        <p><strong>Description:</strong> {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
+                <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
+
+                  <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
+                  <button pButton label="Reviews" (click)="getReviews(trail.id!)" ></button>
+                  <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+                          pButton label="Delete" class="p-button-danger"
+                          (click)="deleteTrail(trail.id!)"></button>
+  </p-card>
+
+</div>
+
+
+
 <div class="p-4">
   <div class="grid gap-4">
     <div *ngFor="let trail of paginatedTrails()" class="col-span-12">
@@ -7,7 +37,8 @@
         <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
         <p><strong>Duration:</strong> {{ trail.duration }}</p>
         <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
-        <p><strong>Description:</strong> {{ trail.description }}</p>
+        <p><strong>Description:</strong> {{ trail.description.length > 10 ? (trail.description | slice:0:10) + '...' : trail.description }}
+                <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
 
         <div class="flex gap-2">
           <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
@@ -23,3 +54,9 @@
   <p-paginator [rows]="5" [totalRecords]="trails.length" 
                (onPageChange)="onPageChange($event)"></p-paginator>
 </div>
+
+<p-dialog header="Full Comment"
+          [(visible)]="displayCommentDialog"
+          [style]="{width: '30vw'}">
+    <p>{{ fullComment }}</p>
+</p-dialog>
