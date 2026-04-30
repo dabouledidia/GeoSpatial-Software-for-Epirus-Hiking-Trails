@@ -1,0 +1,16 @@
+@import 'leaflet/dist/leaflet.css';
+
+.map-container {
+    height: 250px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.map-frame {
+    height: 100%;
+    width: 100%;
+}

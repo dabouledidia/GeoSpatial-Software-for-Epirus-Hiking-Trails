@@ -15,9 +15,12 @@ import { DialogModule } from 'primeng/dialog';
 
 
 
+import { MapViewComponent } from '../map-view/map-view.component';
+
 @Component({
   selector: 'app-trail-list',
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule, MapViewComponent],
   providers: [],
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',

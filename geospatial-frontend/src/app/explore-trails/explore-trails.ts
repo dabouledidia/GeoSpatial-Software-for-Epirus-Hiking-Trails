@@ -8,15 +8,13 @@ import { DataViewModule } from 'primeng/dataview';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-
 import { CarouselModule } from 'primeng/carousel';
-
-
-
+import { MapViewComponent } from '../map-view/map-view.component';
 
 @Component({
   selector: 'app-explore-trails',
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, CarouselModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, CarouselModule, MapViewComponent],
   templateUrl: './explore-trails.html',
   styleUrl: './explore-trails.css',
 })

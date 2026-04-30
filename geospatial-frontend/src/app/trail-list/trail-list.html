@@ -17,6 +17,8 @@
         <p><strong>Description:</strong> {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
                 <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
 
+        <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName"></app-map-view>
+
                   <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
                   <button pButton label="Reviews" (click)="getReviews(trail.id!)" ></button>
                   <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
