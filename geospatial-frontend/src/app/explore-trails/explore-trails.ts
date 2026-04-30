@@ -8,21 +8,19 @@ import { DataViewModule } from 'primeng/dataview';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
-import { DialogModule } from 'primeng/dialog';
 
+import { CarouselModule } from 'primeng/carousel';
 
 
 
 
 @Component({
-  selector: 'app-trail-list',
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule],
-  providers: [],
-  templateUrl: './trail-list.html',
-  styleUrl: './trail-list.css',
+  selector: 'app-explore-trails',
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, CarouselModule],
+  templateUrl: './explore-trails.html',
+  styleUrl: './explore-trails.css',
 })
-export class TrailList implements OnInit{
+export class ExploreTrails implements OnInit{
 
   trails: Trail[] = [];
 
@@ -58,7 +56,7 @@ export class TrailList implements OnInit{
   }
 
   currentPage = 0;
-rowsPerPage = 4;
+rowsPerPage = 6;
 
 paginatedTrails() {
   const start = this.currentPage * this.rowsPerPage;
@@ -76,5 +74,11 @@ showFullComment(text: string) {
   this.fullComment = text;
   this.displayCommentDialog = true;
 }
+
+  carouselImages = [
+  'assets/images/mainpage1.jpg',
+  'assets/images/mainpage2.jpeg',
+  'assets/images/mainpage3.jpg'
+];
 
 }

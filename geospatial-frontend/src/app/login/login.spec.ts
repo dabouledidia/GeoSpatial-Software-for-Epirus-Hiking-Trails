@@ -1,23 +1,41 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserServices } from '../services/user.services';
+import { Route, Router, RouterModule } from '@angular/router';
 
-import { Login } from './login';
+@Component({
+  selector: 'app-login',
+  imports: [ReactiveFormsModule, RouterModule],
+  providers: [],
+  templateUrl: './login.html',
+  styleUrl: './login.css',
+})
+export class Login {
+  userCredentials = new FormGroup({
+    email: new FormControl(''),
+    password: new FormControl('')
+  })
 
-describe('Login', () => {
-  let component: Login;
-  let fixture: ComponentFixture<Login>;
+  constructor(private userService: UserServices, private router: Router){
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Login]
-    })
-    .compileComponents();
+  }
 
-    fixture = TestBed.createComponent(Login);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  login(): void {
+  this.userService.loginUser(this.userCredentials).subscribe({
+    next: (response: any) => {
+      localStorage.setItem('token', response.jwt);
+      console.log("Login success:", response);
+      alert("Login successfully");
+      this.router.navigate(['main-page']); 
+    },
+    error: (error) => { 
+      console.error("Login error:", error);
+      alert("Wrong credentials");
+    }
   });
+}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+
+}
+
+

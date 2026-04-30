@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { UserServices } from '../services/user.services';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
@@ -46,8 +45,7 @@ export class MainPage {
     title: 'Explore Trails',
     description: 'Looking forward to explore trails around Epirus? This is the right place!',
     image: 'assets/images/explore.jpg',
-    link: '/trail-list'
-    //TODO make browse and filters
+    link: '/explore-trails'
   },
   {
     title: 'View All Trails',
