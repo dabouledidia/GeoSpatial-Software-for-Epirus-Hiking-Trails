@@ -1,5 +1,6 @@
 package com.example.geospatial.controllers;
 
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.User;
 import com.example.geospatial.services.TrailService;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class TrailController {
@@ -68,19 +73,44 @@ public class TrailController {
     
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PostMapping("/createTrail")
-    public ResponseEntity<?> createTrail(
-            @Validated @RequestBody Trail trail,
-            @AuthenticationPrincipal CustomUserDetails currentUser) {
-        try {
-            User user = currentUser.getUser();
-            trail.setUser(user);
-            trailServiceImpl.createTrail(trail);
-            return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
-        } catch (Exception e) {
-            logger.error("Error creating trail", e);
-            return ResponseEntity.internalServerError().body(Map.of("error", "Unable to create trail."));
-        } 
+public ResponseEntity<?> createTrail(
+        @RequestParam("name") String name,
+        @RequestParam("location") String location,
+        @RequestParam("lengthKm") Double lengthKm,
+        @RequestParam("duration") Double duration,
+        @RequestParam("difficulty") String difficulty,
+        @RequestParam("description") String description,
+        @RequestParam("image") MultipartFile image,
+        @AuthenticationPrincipal CustomUserDetails currentUser
+) {
+    try {
+        User user = currentUser.getUser();
+
+        String fileName = image.getOriginalFilename();
+        Path filePath = Paths.get("uploads", fileName);
+        Files.createDirectories(filePath.getParent());
+        Files.write(filePath, image.getBytes());
+
+        Trail trail = new Trail();
+        trail.setName(name);
+        trail.setLocation(location);
+        trail.setLengthKm(lengthKm);
+        trail.setDuration(duration);
+        trail.setDifficulty(difficulty);
+        trail.setDescription(description);
+        trail.setImage("uploads/" + fileName); 
+        trail.setUser(user);
+
+        trailServiceImpl.createTrail(trail);
+
+        return ResponseEntity.ok(Map.of("message", "Trail created successfully"));
+
+    } catch (Exception e) {
+        logger.error("Error creating trail", e);
+        return ResponseEntity.internalServerError()
+                .body(Map.of("error", "Unable to create trail."));
     }
+}
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")    
     @PutMapping("/updateTrail")

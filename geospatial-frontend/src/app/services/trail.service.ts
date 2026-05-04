@@ -31,4 +31,8 @@ private apiUrl = 'http://localhost:8080/';
     deleteTrail(id: number): Observable<Object>{
         return this.http.delete(this.apiUrl+ "deleteTrail/"+ id);
     }
+    
+    addImage(image: String): Observable<any> {
+        return this.http.post(this.apiUrl + "addTrailImage/", image)
+    }
 }

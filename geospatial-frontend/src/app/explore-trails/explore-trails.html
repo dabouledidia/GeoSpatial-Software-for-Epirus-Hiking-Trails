@@ -1,0 +1,40 @@
+<p-carousel [value]="trails" [numVisible]="2" [numScroll]="1" [circular]="true">
+  <ng-template pTemplate="item" let-trail>
+    <p-card [style]="{ width: '50rem' }">
+      <ng-template pTemplate="header">
+        <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
+      </ng-template>
+
+      <ng-template pTemplate="title">
+        <a [routerLink]="['/trails', trail.trailName]">{{ trail.trailName }}</a>
+      </ng-template>
+
+      <p><strong>Location:</strong> {{ trail.location }}</p>
+      <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
+      <p><strong>Duration:</strong> {{ trail.duration }} H</p>
+      <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
+
+      <p>
+        <strong>Description:</strong>
+        {{
+          trail.description.length > 100
+            ? (trail.description | slice : 0 : 100) + '...'
+            : trail.description
+        }}
+        <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">
+          [more]
+        </a>
+      </p>
+
+      <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
+      <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
+      <button
+        *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+        pButton
+        label="Delete"
+        class="p-button-danger"
+        (click)="deleteTrail(trail.id!)"
+      ></button>
+    </p-card>
+  </ng-template>
+</p-carousel>

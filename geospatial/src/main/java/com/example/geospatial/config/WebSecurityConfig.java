@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/login", "/register", "/all_trails", "/trail_by_id").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Allow Swagger UI
+                .requestMatchers("/uploads/**").permitAll()
                 
                 .anyRequest().authenticated()
             )

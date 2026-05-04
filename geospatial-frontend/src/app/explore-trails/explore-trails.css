@@ -1,0 +1,103 @@
+:host {
+  display: block;
+  padding: 2rem;
+  background: #f5f7fa;
+}
+
+/* Carousel spacing */
+:host ::ng-deep .p-carousel {
+  padding: 1rem 0;
+}
+
+/* Card styling */
+:host ::ng-deep .p-card {
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  background: #ffffff;
+}
+
+/* Hover effect */
+:host ::ng-deep .p-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Image styling */
+:host ::ng-deep .p-card img {
+  height: 420px;
+  width: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+/* Title */
+:host ::ng-deep .p-card .p-card-title a {
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  transition: color 0.2s;
+}
+
+:host ::ng-deep .p-card .p-card-title a:hover {
+  color: #3498db;
+}
+
+/* Text content */
+:host ::ng-deep .p-card p {
+  margin: 0.4rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Strong labels */
+:host ::ng-deep .p-card strong {
+  color: #2c3e50;
+}
+
+/* Description */
+:host ::ng-deep .p-card p a {
+  color: #3498db;
+  font-size: 0.85rem;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Buttons container */
+:host ::ng-deep .p-card .p-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Buttons styling */
+:host ::ng-deep .p-button {
+  border-radius: 12px;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Button hover */
+:host ::ng-deep .p-button:hover {
+  transform: scale(1.03);
+}
+
+/* Danger button tweak */
+:host ::ng-deep .p-button-danger {
+  background: #e74c3c;
+  border: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :host ::ng-deep .p-card {
+    width: 100% !important;
+  }
+
+  :host {
+    padding: 1rem;
+  }
+}

@@ -1,25 +1,39 @@
-<div class="p-4">
-  <div class="grid gap-4">
-    <div *ngFor="let trail of paginatedTrails()" class="col-span-12">
-      <div class="p-4 border rounded-lg shadow-sm flex flex-col gap-3">
-        <h3 class="text-xl font-bold">{{ trail.trailName }}</h3>
-        <p><strong>Location:</strong> {{ trail.location }}</p>
-        <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
-        <p><strong>Duration:</strong> {{ trail.duration }}</p>
-        <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
-        <p><strong>Description:</strong> {{ trail.description }}</p>
+<div style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
 
-        <div class="flex gap-2">
-          <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
-          <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
-          <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-                  pButton label="Delete" class="p-button-danger"
-                  (click)="deleteTrail(trail.id!)"></button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <p-card *ngFor="let trail of paginatedTrails()" [style]="{ width: '50rem' }">
+
+    <ng-template #header>
+      <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
+    </ng-template>
+
+    <ng-template #title>
+      <a [routerLink]="trail.trailName ">{{ trail.trailName }}</a>
+    </ng-template>
+
+<p><strong>Location:</strong> {{ trail.location }}</p>
+        <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
+        <p><strong>Duration:</strong> {{ trail.duration }} H</p>
+        <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
+        <p><strong>Description:</strong> {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
+                <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
+
+                  <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
+                  <button pButton label="Reviews" (click)="getReviews(trail.id!)" ></button>
+                  <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+                          pButton label="Delete" class="p-button-danger"
+                          (click)="deleteTrail(trail.id!)"></button>
+  </p-card>
+
+</div>
+
+
+
 
   <p-paginator [rows]="5" [totalRecords]="trails.length" 
                (onPageChange)="onPageChange($event)"></p-paginator>
-</div>
+
+<p-dialog header="Full Comment"
+          [(visible)]="displayCommentDialog"
+          [style]="{width: '30vw'}">
+    <p>{{ fullComment }}</p>
+</p-dialog>

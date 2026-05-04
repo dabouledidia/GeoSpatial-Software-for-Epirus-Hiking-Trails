@@ -1,0 +1,6 @@
+{
+    "java.project.sourcePaths": [
+        "geospatial-frontend/src/assets/images"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

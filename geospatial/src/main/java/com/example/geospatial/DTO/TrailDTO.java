@@ -10,9 +10,10 @@ public class TrailDTO {
     private String difficulty;
     private String description;
     private String email;
+    private String image;
     
     public TrailDTO(Long id, String trailName, String location, double lengthKm, double duration, String difficulty,
-            String description, String email) {
+            String description, String email, String image) {
         this.id = id;
         this.trailName = trailName;
         this.location = location;
@@ -21,6 +22,7 @@ public class TrailDTO {
         this.difficulty = difficulty;
         this.description = description;
         this.email = email;
+        this.image = image;
     }
 
     public Long getId() {
@@ -85,6 +87,14 @@ public class TrailDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     

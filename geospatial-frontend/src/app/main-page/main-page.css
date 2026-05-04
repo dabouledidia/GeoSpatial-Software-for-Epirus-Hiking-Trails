@@ -1,0 +1,16 @@
+.carousel-img {
+  display: block;           
+  margin-left: auto;        
+  margin-right: auto;       
+  width: 70%;         
+  height: 600px;        
+  border-radius: 12px;      
+  object-fit: fill;     
+}
+
+
+.w-full {
+    width: 20%;
+    height: 80px;
+    object-fit: fill; 
+}

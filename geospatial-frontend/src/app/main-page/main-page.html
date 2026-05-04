@@ -4,36 +4,37 @@
     </p-card>
 </div>
 
+<p-carousel [value]="carouselImages" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000">
+  <ng-template let-image pTemplate="item">
+    <img [src]="image" class="carousel-img" />
+  </ng-template>
+</p-carousel>
 
+<div style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
 
-<p-card [style]="{ width: '25rem'}">
+    <p-card *ngFor="let card of cards" [style]="{ width: '25rem' }">
+
     <ng-template #header>
-        <img alt="Card" class="w-full" src="https://thru-hiking.com/wp-content/uploads/2022/11/IMG_0410-1.jpeg" />
+      <img [src]="card.image" class="w-full" />
     </ng-template>
-    <ng-template #title> <a routerLink="/trail-list"> See All Trails</a> </ng-template>
-    <ng-template #subtitle> Trails around Epirus </ng-template>
+
+    <ng-template #title>
+      <a [routerLink]="card.link">{{ card.title }}</a>
+    </ng-template>
+
     <p>
-       Looking forward to explore trails around Epirus? This is the right place!
+      {{ card.description }}
     </p>
-    <ng-template #footer>
-    </ng-template>
-</p-card>
 
-<p-card [style]="{ width: '25rem'}">
-    <ng-template #header>
-        <img alt="Card" class="w-full" src="https://caverntours.com/wp-content/uploads/2021/08/how-to-make-trails-in-the-woods.jpg" />
-    </ng-template>
-    <ng-template #title> <a routerLink="/create-trail"> Create A Trail</a> </ng-template>
-    <ng-template #subtitle> Create your trail near epirus </ng-template>
-    <p>
-       Add your favourite trails so other people can visit and see what you saw!
-    </p>
-    <ng-template #footer>
-    </ng-template>
-</p-card>
+  </p-card>
+
+</div>
+        
 
 
-<div class="footer flex flex-column align-items-center gap-2 p-4">
+
+
+<div class="footer flex flex-column align-items-center gap-2 p-4 text-center">
     
      <div class="flex justify-content-center text-sm">
         <a (click)="showAbout()" class="cursor-pointer mx-2">About Us</a>
