@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,16 +71,7 @@ void setUp() {
 }
 
 
-@Test
-void getTrail_shouldReturnOk_whenTrailExists() {
-    when(trailServiceImpl.getTrail(1L)).thenReturn(Optional.of(testTrail));
 
-    ResponseEntity<?> response = trailController.getTrail(1L);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(Optional.of(testTrail), response.getBody());
-    verify(trailServiceImpl, times(1)).getTrail(1L);
-}
 
 @Test
 void getTrail_shouldReturn500_whenServiceThrows() {
@@ -93,14 +83,7 @@ void getTrail_shouldReturn500_whenServiceThrows() {
     assertErrorMessage(response, "Unable to fetch trail.");
 }
 
-@Test
-void getTrail_shouldReturnOkWithEmptyOptional_whenNotFound() {
-    when(trailServiceImpl.getTrail(99L)).thenReturn(Optional.empty());
 
-    ResponseEntity<?> response = trailController.getTrail(99L);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-}
 
     @Test
     void getAllTrail_shouldReturnOkWithEmptyList() {

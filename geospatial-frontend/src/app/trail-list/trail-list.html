@@ -6,9 +6,11 @@
       <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
     </ng-template>
 
-    <ng-template #title>
-      <a [routerLink]="trail.trailName ">{{ trail.trailName }}</a>
-    </ng-template>
+      <ng-template #title>
+        <a (click)="getTrail(trail.id!)" style="cursor: pointer;">
+          {{ trail.trailName }}
+        </a>
+      </ng-template>
 
 <p><strong>Location:</strong> {{ trail.location }}</p>
         <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
@@ -17,7 +19,6 @@
         <p><strong>Description:</strong> {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
                 <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
 
-        <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName"></app-map-view>
 
                   <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
                   <button pButton label="Reviews" (click)="getReviews(trail.id!)" ></button>

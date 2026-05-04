@@ -1,0 +1,34 @@
+<div *ngIf="trail; else loading" style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
+
+  <p-card [style]="{ width: '50rem' }">
+
+    <ng-template #header>
+      <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
+    </ng-template>
+
+    <ng-template #title>
+      {{ trail.trailName }}
+    </ng-template>
+
+    <p><strong>Location:</strong> {{ trail.location }}</p>
+    <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
+    <p><strong>Duration:</strong> {{ trail.duration }} H</p>
+    <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
+    <p><strong>Description:</strong> {{ trail.description }}</p>
+
+    <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName"></app-map-view>
+
+    <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
+    <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
+    <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+            pButton label="Delete" class="p-button-danger"
+            (click)="deleteTrail(trail.id!)"></button>
+  </p-card>
+
+</div>
+
+<ng-template #loading>
+  <div style="display:flex; justify-content:center; padding:40px;">
+    <p-progressSpinner />
+  </div>
+</ng-template>

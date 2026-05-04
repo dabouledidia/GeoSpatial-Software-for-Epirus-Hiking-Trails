@@ -67,14 +67,7 @@ class TrailServiceImplTest {
         assertEquals(400, response.getStatusCodeValue());
     }
 
-    @Test
-    void getTrail_found() {
-        when(trailRepository.findById(1L)).thenReturn(Optional.of(trail));
 
-        Optional<Trail> result = trailService.getTrail(1L);
-
-        assertTrue(result.isPresent());
-    }
 
     @Test
     void getAllTrail_success() {

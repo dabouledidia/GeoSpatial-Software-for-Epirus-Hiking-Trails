@@ -35,4 +35,9 @@ private apiUrl = 'http://localhost:8080/';
     addImage(image: String): Observable<any> {
         return this.http.post(this.apiUrl + "addTrailImage/", image)
     }
+
+     getTrail(id: number): Observable<any>{
+        return this.http.get<any>(this.apiUrl + "trail_by_id/"+ id)
+    }
+
 }

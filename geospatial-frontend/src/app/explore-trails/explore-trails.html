@@ -5,8 +5,10 @@
         <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
       </ng-template>
 
-      <ng-template pTemplate="title">
-        <a [routerLink]="['/trails', trail.trailName]">{{ trail.trailName }}</a>
+     <ng-template #title>
+        <a (click)="getTrail(trail.id!)" style="cursor: pointer;">
+          {{ trail.trailName }}
+        </a>
       </ng-template>
 
       <p><strong>Location:</strong> {{ trail.location }}</p>
@@ -24,7 +26,6 @@
         <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">
           [more]
         </a>
-      <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName"></app-map-view>
 
       <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
       <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
@@ -38,3 +39,9 @@
     </p-card>
   </ng-template>
 </p-carousel>
+
+<p-dialog header="Full Comment"
+          [(visible)]="displayCommentDialog"
+          [style]="{width: '30vw'}">
+    <p>{{ fullComment }}</p>
+</p-dialog>

@@ -15,12 +15,11 @@ import { DialogModule } from 'primeng/dialog';
 
 
 
-import { MapViewComponent } from '../map-view/map-view.component';
 
 @Component({
   selector: 'app-trail-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule, MapViewComponent],
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule],
   providers: [],
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',
@@ -50,6 +49,11 @@ export class TrailList implements OnInit{
     this.trailService.deleteTrail(id).subscribe(data =>{
       this.getTrails();
     })
+  }
+
+  getTrail(id: number){
+    this.router.navigate([`trail-page/${id}`])
+ 
   }
 
   createReview(id: number){
