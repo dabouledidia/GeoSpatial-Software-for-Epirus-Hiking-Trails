@@ -68,7 +68,7 @@ createTrail(): void {
 
   const formValue = this.trailForm.value;
 
-  const formData = new FormData(); // ✅ δημιουργία
+  const formData = new FormData(); 
 
   formData.append('name', formValue.name);
   formData.append('location', formValue.location);
@@ -76,12 +76,12 @@ createTrail(): void {
   formData.append('duration', formValue.duration);
   formData.append('difficulty', formValue.difficulty);
   formData.append('description', formValue.description);
-  formData.append('image', formValue.image); // ✅ το file
+  formData.append('image', formValue.image); 
 
   this.trailService.createTrail(formData).subscribe({
     next: (res) => {
       console.log("Trail created:", res);
-      this.router.navigate(['']); // βάλε το εδώ
+      this.router.navigate(['']); 
     },
     error: (err) => console.error("Error:", err)
   });

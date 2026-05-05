@@ -1,34 +1,77 @@
-<div *ngIf="trail; else loading" style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
+<div *ngIf="trail; else loading" class="container">
 
-  <p-card [style]="{ width: '50rem' }">
+  <p-card class="trail-card">
 
     <ng-template #header>
-      <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
+      <img [src]="'http://localhost:8080/' + trail.image" class="header-img" />
     </ng-template>
 
     <ng-template #title>
-      {{ trail.trailName }}
+      <div class="title">{{ trail.trailName }}</div>
     </ng-template>
 
-    <p><strong>Location:</strong> {{ trail.location }}</p>
-    <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
-    <p><strong>Duration:</strong> {{ trail.duration }} H</p>
-    <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
-    <p><strong>Description:</strong> {{ trail.description }}</p>
+    <div class="trail-info">
+      <div><strong>📍 Location:</strong> {{ trail.location }}</div>
+      <div><strong>📏 Length:</strong> {{ trail.lengthKm }} km</div>
+      <div><strong>⏱ Duration:</strong> {{ trail.duration }} H</div>
+      <div><strong>🔥 Difficulty:</strong> {{ trail.difficulty }}</div>
+    </div>
 
-    <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName"></app-map-view>
+    <div class="description">
+      <strong>Description:</strong>
+      <p>{{ trail.description }}</p>
+    </div>
 
-    <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
-    <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
-    <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-            pButton label="Delete" class="p-button-danger"
-            (click)="deleteTrail(trail.id!)"></button>
+    <div class="map-container">
+      <app-map-view 
+        [searchLocation]="trail.location" 
+        [trailName]="trail.trailName">
+      </app-map-view>
+    </div>
+
+    <div *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+         class="upload-section">
+
+      <input type="file"
+             multiple
+             accept="image/*"
+             (change)="onImagesSelect($event)" />
+
+      <button pButton
+              label="Ανέβασμα ({{ selectedImages.length }})"
+              icon="pi pi-upload"
+              (click)="addImages(trail.id!)"
+              [disabled]="selectedImages.length === 0">
+      </button>
+    </div>
+
+    <div class="actions">
+      <button pButton label="Create Review" icon="pi pi-pencil" (click)="createReview(trail.id!)"></button>
+      <button pButton label="Reviews" icon="pi pi-comments" class="p-button-secondary"
+              (click)="getReviews(trail.id!)"></button>
+      <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+              pButton label="Delete" icon="pi pi-trash"
+              class="p-button-danger"
+              (click)="deleteTrail(trail.id!)"></button>
+    </div>
+
   </p-card>
-
 </div>
 
 <ng-template #loading>
-  <div style="display:flex; justify-content:center; padding:40px;">
+  <div class="loading">
     <p-progressSpinner />
   </div>
 </ng-template>
+
+<h3 class="photos-title">📸 Photos</h3>
+
+<p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true" class="carousel">
+  <ng-template pTemplate="item" let-img>
+    <div class="carousel-item">
+      <img [src]="'http://localhost:8080/uploads/' + img.imageURL"
+           [alt]="trail.trailName"
+           class="carousel-img" />
+    </div>
+  </ng-template>
+</p-carousel>

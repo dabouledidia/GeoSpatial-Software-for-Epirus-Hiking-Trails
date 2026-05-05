@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Trail } from '../models/trail.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,19 +11,14 @@ private apiUrl = 'http://localhost:8080/';
     constructor(private http: HttpClient){}
 
     getTrails(): Observable<any[]>{
-        const token = localStorage.getItem('token');
-
         return this.http.get<any[]>(this.apiUrl + "all_trails")
     }
 
     getUserTrails(): Observable<any[]>{
-        const token = localStorage.getItem('token');
-
         return this.http.get<any[]>(this.apiUrl + "user_trails")
     }
 
     createTrail(trail: FormData): Observable<any> {
-      const token = localStorage.getItem('token');
       return this.http.post(this.apiUrl + "createTrail", trail)
     }
 
@@ -40,4 +34,14 @@ private apiUrl = 'http://localhost:8080/';
         return this.http.get<any>(this.apiUrl + "trail_by_id/"+ id)
     }
 
+    addImages(trailId: number, images: File[]): Observable<any> {
+        const formData = new FormData();
+        images.forEach(img => formData.append('images', img));
+        return this.http.post(this.apiUrl + "add_images/" + trailId, formData)
+    }
+
+
+    getImagesByTrail(trailId: number): Observable<any[]>{
+        return this.http.get<any[]>(this.apiUrl + "images_by_trail/" + trailId)
+    }
 }
