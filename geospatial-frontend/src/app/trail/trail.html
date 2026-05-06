@@ -38,7 +38,7 @@
              (change)="onImagesSelect($event)" />
 
       <button pButton
-              label="Ανέβασμα ({{ selectedImages.length }})"
+              label="Upload ({{ selectedImages.length }})"
               icon="pi pi-upload"
               (click)="addImages(trail.id!)"
               [disabled]="selectedImages.length === 0">

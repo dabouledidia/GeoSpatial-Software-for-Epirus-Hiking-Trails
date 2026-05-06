@@ -43,36 +43,66 @@
         </ng-container>
 
         <ng-template #loggedIn>
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fw-semibold" href="#" data-bs-toggle="dropdown">
-              <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />                       
-                    </button>
-            </a>
+  <li class="nav-item dropdown">
 
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                 <a class="btn btn-light text-primary" routerLink="/profile">
-              <i class="bi bi-person-circle"></i> Profile
-            </a>
-                <a class="dropdown-item text-danger" href="#" (click)="logout()">
-                  <i class="bi bi-box-arrow-right"></i> Log Out
-                </a>
+    <!-- Trigger Button -->
+    <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+  <button class="avatar-trigger">
+    <img
+      src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      class="avatar-img" />
+    <span class="avatar-name">{{ userService.getUser() }}</span>
+    <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</a>
 
-                <button pRipple 
-                    class="relative overflow-hidden w-full border-0 bg-transparent flex items-center gap-3 p-3 hover:bg-surface-100 dark:hover:bg-surface-800 cursor-pointer transition-colors duration-200">
+<ul class="dropdown-menu dropdown-menu-end user-dropdown">
+  <li class="user-dropdown__header">
+    <img
+      src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      class="avatar-img avatar-img--lg" />
+    <div>
+      <p class="user-dropdown__name">{{ userService.getUser() }}</p>
+      <p class="user-dropdown__email">{{ userService.getRole() }}</p>
+    </div>
+  </li>
 
-                    <p-avatar 
-                        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-                        shape="circle">
-                    </p-avatar>
-                </button>
-              </li>
-            </ul>
-          </li>
-        </ng-template>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li>
+        <a class="user-dropdown__item" routerLink="/profile">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M2.5 13c0-2.485 2.462-4.5 5.5-4.5s5.5 2.015 5.5 4.5"
+              stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Profile
+        </a>
+      </li>
+
+
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li>
+        <a class="user-dropdown__item user-dropdown__item--danger" href="#" (click)="logout()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3"
+              stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M10 11l3-3-3-3M13 8H6"
+              stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Log out
+        </a>
+      </li>
+
+    </ul>
+  </li>
+</ng-template>
 
       </ul>
     </div>
