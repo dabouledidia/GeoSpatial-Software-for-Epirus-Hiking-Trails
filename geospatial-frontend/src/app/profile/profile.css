@@ -1,0 +1,93 @@
+.profile-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* HEADER */
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-header h2 {
+  margin-top: 10px;
+}
+
+.role {
+  color: #777;
+  font-size: 14px;
+}
+
+/* TABS */
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* SECTION */
+.section-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* GRID */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* TRAIL CARD */
+.trail-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.trail-card:hover {
+  transform: translateY(-5px);
+}
+
+/* INFO */
+.trail-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+/* DESCRIPTION */
+.description {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* REVIEW CARD */
+.review-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.rating {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.comment {
+  color: #555;
+}
+
+/* ACTIONS */
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}

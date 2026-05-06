@@ -3,3 +3,150 @@
     height: 400px;
     object-fit:cover;
 }
+.trail-img {
+  width: 100%;
+  height: 220px;        
+  object-fit: cover;
+  display: block;
+}
+
+.trails-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 24px;
+  max-width: 1200px;     
+  margin: 0 auto;      
+}
+
+.trail-card {
+  background: white;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.trail-body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.trail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.trail-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  cursor: pointer;
+  color: #111;
+}
+
+.trail-name:hover { color: #1D9E75; }
+
+.diff-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.diff-easy   { background: #E1F5EE; color: #085041; }
+.diff-medium { background: #FAEEDA; color: #ea8613; }
+.diff-hard   { background: #FCEBEB; color: #791F1F; }
+
+.trail-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.meta-label {
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-value {
+  font-size: 12px;
+  color: #111;
+  font-weight: 500;
+}
+
+.trail-desc {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  flex: 1;
+  border-top: 1px solid #ebebeb;
+  padding-top: 12px;
+}
+
+.trail-desc a {
+  color: #1D9E75;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e2e2e2;
+  background: transparent;
+  color: #111;
+  transition: background 0.12s;
+}
+
+.btn-action:hover { background: #f5f5f5; }
+
+.btn-primary {
+  border-color: #1D9E75;
+  color: #085041;
+  background: #E1F5EE;
+}
+
+.btn-primary:hover { background: #9FE1CB; }
+
+.btn-danger {
+  border-color: #f5c6c6;
+  color: #c0392b;
+}
+
+.btn-danger:hover { background: #fdf0f0; }
+
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}

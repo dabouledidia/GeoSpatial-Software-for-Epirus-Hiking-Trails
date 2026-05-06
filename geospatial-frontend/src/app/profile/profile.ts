@@ -9,21 +9,27 @@ import { Review } from '../models/review.model';
 import { ReviewService } from '../services/review.service';
 import { UserServices } from '../services/user.services';
 import { ButtonModule } from 'primeng/button';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, RouterModule, FormsModule, SelectButtonModule, ButtonModule],
+  imports: [CommonModule, RouterModule, FormsModule, SelectButtonModule, ButtonModule, AvatarModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
-export class Profile {
+export class Profile implements OnInit {
 
   stateOptions = [
     { label: 'My Trails', value: 'trails' },
     { label: 'My Reviews', value: 'reviews' }
   ];
 
-  selectedOption: 'trails' | 'reviews' | null= null;
+  ngOnInit() {
+  this.loadMyTrails();
+  this.loadMyReviews();
+  }
+
+  selectedOption: 'trails' | 'reviews' = 'trails';
 
   myTrails: Trail[] = [];
   myReviews: Review[] = [];

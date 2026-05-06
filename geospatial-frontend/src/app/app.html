@@ -45,12 +45,11 @@
         <ng-template #loggedIn>
   <li class="nav-item dropdown">
 
-    <!-- Trigger Button -->
-    <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+<a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
   <button class="avatar-trigger">
-    <img
-      src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-      class="avatar-img" />
+    <div class="avatar-initials">
+      {{ userService.getUser()?.[0]?.toUpperCase() }}
+    </div>
     <span class="avatar-name">{{ userService.getUser() }}</span>
     <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
       <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5"
@@ -61,14 +60,15 @@
 
 <ul class="dropdown-menu dropdown-menu-end user-dropdown">
   <li class="user-dropdown__header">
-    <img
-      src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-      class="avatar-img avatar-img--lg" />
+    <div class="avatar-initials avatar-initials--lg">
+      {{ userService.getUser()?.[0]?.toUpperCase() }}
+    </div>
     <div>
       <p class="user-dropdown__name">{{ userService.getUser() }}</p>
       <p class="user-dropdown__email">{{ userService.getRole() }}</p>
     </div>
   </li>
+
 
 
       <li><hr class="dropdown-divider"></li>

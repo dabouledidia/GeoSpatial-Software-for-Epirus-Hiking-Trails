@@ -1,27 +1,46 @@
-<h2> Users List</h2>
-<table class = "table table-striped">
+<div class="tbl-wrap">
+  <div class="tbl-header">
+    <p class="tbl-title">Users list</p>
+    <span class="tbl-count">{{ users.length }} users</span>
+  </div>
+  <table>
     <thead>
-        <tr>
-            <th>Email</th>
-            <th>Firstname</th>
-            <th>Lastname (Km)</th>
-            <th>Role</th>
-
-
-        </tr>
+      <tr>
+        <th>Email</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
     </thead>
     <tbody>
-        <tr *ngFor = "let user of users">
-            <td> {{user.email}} </td>
-            <td> {{user.firstname}} </td>
-            <td> {{user.lastname}} </td>
-            <td> {{user.role}} </td>
-
-
-            <td>
-                <button (click)="deleteUser(user.id!)" class="btn btn-danger"> Delete</button>
-            </td>
-
-        </tr>
+      <tr *ngFor="let user of users">
+        <td>
+          <div class="avatar-cell">
+            <div class="avatar-initials">
+              {{ user.firstname[0] }}{{ user.lastname[0] }}
+            </div>
+            {{ user.email }}
+          </div>
+        </td>
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>
+          <span class="role-badge" [ngClass]="user.role === 'ADMIN' ? 'role-admin' : 'role-user'">
+            {{ user.role }}
+          </span>
+        </td>
+        <td>
+          <button class="del-btn" (click)="deleteUser(user.id!)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+              <polyline points="3,4 13,4"/>
+              <path d="M5 4V3h6v1M6 7v5M10 7v5"/>
+              <rect x="4" y="4" width="8" height="9" rx="1"/>
+            </svg>
+            Delete
+          </button>
+        </td>
+      </tr>
     </tbody>
-</table>
+  </table>
+</div>

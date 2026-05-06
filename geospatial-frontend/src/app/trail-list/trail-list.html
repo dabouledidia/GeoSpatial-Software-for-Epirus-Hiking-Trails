@@ -1,42 +1,54 @@
-<div style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
+<div class="trails-grid">
+  <div *ngFor="let trail of paginatedTrails()" class="trail-card">
 
-    <p-card *ngFor="let trail of paginatedTrails()" [style]="{ width: '50rem' }">
+    <img [src]="'http://localhost:8080/' + trail.image" class="trail-img" />
 
-    <ng-template #header>
-      <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
-    </ng-template>
+    <div class="trail-body">
+      <div class="trail-header">
+        <p class="trail-name" (click)="getTrail(trail.id!)">{{ trail.trailName }}</p>
+        <span class="diff-badge" [ngClass]="{
+          'diff-easy': trail.difficulty === 'Easy',
+          'diff-medium': trail.difficulty === 'Mid',
+          'diff-hard': trail.difficulty === 'Hard'
+        }">{{ trail.difficulty }}</span>
+      </div>
 
-      <ng-template #title>
-        <a (click)="getTrail(trail.id!)" style="cursor: pointer;">
-          {{ trail.trailName }}
-        </a>
-      </ng-template>
+      <div class="trail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Location</span>
+          <span class="meta-value">{{ trail.location }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Length</span>
+          <span class="meta-value">{{ trail.lengthKm }} km</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Duration</span>
+          <span class="meta-value">{{ trail.duration }} h</span>
+        </div>
+      </div>
 
-<p><strong>Location:</strong> {{ trail.location }}</p>
-        <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
-        <p><strong>Duration:</strong> {{ trail.duration }} H</p>
-        <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
-        <p><strong>Description:</strong> {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
-                <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a></p>
+      <p class="trail-desc">
+        {{ trail.description.length > 100 ? (trail.description | slice:0:100) + '...' : trail.description }}
+        <a *ngIf="trail.description.length > 100" href="#"
+          (click)="showFullComment(trail.description); $event.preventDefault()">[more]</a>
+      </p>
 
-
-                  <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
-                  <button pButton label="Reviews" (click)="getReviews(trail.id!)" ></button>
-                  <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-                          pButton label="Delete" class="p-button-danger"
-                          (click)="deleteTrail(trail.id!)"></button>
-  </p-card>
-
+      <div class="card-actions">
+        <button class="btn-action btn-primary" (click)="createReview(trail.id!)">Create review</button>
+        <button class="btn-action" (click)="getReviews(trail.id!)">Reviews</button>
+        <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+          class="btn-action btn-danger" (click)="deleteTrail(trail.id!)">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="pagination-wrap">
+  <p-paginator [rows]="5" [totalRecords]="trails.length"
+    (onPageChange)="onPageChange($event)"></p-paginator>
+</div>
 
-
-
-  <p-paginator [rows]="5" [totalRecords]="trails.length" 
-               (onPageChange)="onPageChange($event)"></p-paginator>
-
-<p-dialog header="Full Comment"
-          [(visible)]="displayCommentDialog"
-          [style]="{width: '30vw'}">
-    <p>{{ fullComment }}</p>
+<p-dialog header="Full description" [(visible)]="displayCommentDialog" [style]="{width: '30vw'}">
+  <p>{{ fullComment }}</p>
 </p-dialog>
