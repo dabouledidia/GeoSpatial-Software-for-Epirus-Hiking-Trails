@@ -8,20 +8,19 @@ import { DataViewModule } from 'primeng/dataview';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-
 import { CarouselModule } from 'primeng/carousel';
-
-
+import { DialogModule } from 'primeng/dialog';
 
 
 @Component({
   selector: 'app-explore-trails',
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, CarouselModule],
+  standalone: true,
+  imports: [CommonModule, DialogModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, CarouselModule],
   templateUrl: './explore-trails.html',
   styleUrl: './explore-trails.css',
 })
 export class ExploreTrails implements OnInit{
-
+  trail!: Trail;
   trails: Trail[] = [];
 
   constructor(public userService: UserServices, private trailService: TrailService, private router: Router){}
@@ -80,5 +79,10 @@ showFullComment(text: string) {
   'assets/images/mainpage2.jpeg',
   'assets/images/mainpage3.jpg'
 ];
+
+  getTrail(id: number){
+    this.router.navigate([`trail-page/${id}`])
+ 
+  }
 
 }

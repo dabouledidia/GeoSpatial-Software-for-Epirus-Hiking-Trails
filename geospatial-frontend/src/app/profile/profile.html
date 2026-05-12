@@ -1,43 +1,81 @@
-<p-selectButton
-  [options]="stateOptions"
-  [(ngModel)]="selectedOption"
-  optionLabel="label"
-  optionValue="value"
-  (onChange)="onOptionChange()">
-</p-selectButton>
+<div class="profile-container">
 
-
-<ng-container *ngIf="selectedOption === 'trails'">
-  <h3 class="mt-4">My Trails</h3>
-
-  <div *ngFor="let trail of myTrails" class="card mb-3 p-3">
-    <h3 class="text-xl font-bold">{{ trail.trailName }}</h3>
-        <p><strong>Location:</strong> {{ trail.location }}</p>
-        <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
-        <p><strong>Duration:</strong> {{ trail.duration }}</p>
-        <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
-        <p><strong>Description:</strong> {{ trail.description }}</p>
-
-        <div class="flex gap-2">
-          <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
-          <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-                  pButton label="Delete" class="p-button-danger"
-                  (click)="deleteTrail(trail.id!)"></button>
+  <!-- HEADER -->
+  <div class="profile-header">
+    <div class="avatar-initials avatar-initials--lg">
+      {{ userService.getUser()?.[0]?.toUpperCase() }}
     </div>
-  </div>
-</ng-container>
 
-<ng-container *ngIf="selectedOption === 'reviews'">
-  <h3 class="mt-4">My Reviews</h3>
-
-  <div *ngFor="let review of myReviews" class="card mb-3 p-3">
-    <p><strong>Rating:</strong> {{ review.rating }}</p>
-    <p>{{ review.trailId }}</p>
-    <p>{{ review.comment }}</p>
-    <button
-                    *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === review.userEmail"
-                    pButton label="Delete" class="p-button-danger"
-                    (click)="deleteReview(review.id!)">
-                </button>
+    <h2>{{ userService.getUser() }}</h2>
+    <p class="role">{{ userService.getRole() }}</p>
   </div>
-</ng-container>
+
+  <!-- SELECT BUTTON -->
+  <div class="profile-tabs">
+    <p-selectButton
+      [options]="stateOptions"
+      [(ngModel)]="selectedOption"
+      optionLabel="label"
+      optionValue="value">
+    </p-selectButton>
+  </div>
+
+  <!-- TRAILS -->
+  <ng-container *ngIf="selectedOption === 'trails'">
+    <h3 class="section-title">My Trails 🌲</h3>
+
+    <div class="card-grid">
+      <div *ngFor="let trail of myTrails" class="trail-card">
+
+        <h3>{{ trail.trailName }}</h3>
+
+        <div class="trail-info">
+          <span>📍 {{ trail.location }}</span>
+          <span>📏 {{ trail.lengthKm }} km</span>
+          <span>⏱ {{ trail.duration }}</span>
+          <span>🔥 {{ trail.difficulty }}</span>
+        </div>
+
+        <p class="description">{{ trail.description }}</p>
+
+        <div class="actions">
+          <button pButton label="Reviews" icon="pi pi-comments"
+                  (click)="getReviews(trail.id!)"></button>
+
+          <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+                  pButton label="Delete" icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="deleteTrail(trail.id!)"></button>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- REVIEWS -->
+  <ng-container *ngIf="selectedOption === 'reviews'">
+    <h3 class="section-title">My Reviews ⭐</h3>
+
+    <div class="card-grid">
+      <div *ngFor="let review of myReviews" class="review-card">
+
+        <div class="rating">
+          ⭐ {{ review.rating }} / 5
+        </div>
+
+        <p class="comment">{{ review.comment }}</p>
+
+        <div class="actions">
+          <button
+            *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === review.userEmail"
+            pButton label="Delete" icon="pi pi-trash"
+            class="p-button-danger"
+            (click)="deleteReview(review.id!)">
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+
+</div>

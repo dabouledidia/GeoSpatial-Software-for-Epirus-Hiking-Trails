@@ -1,16 +1,96 @@
-.carousel-img {
-  display: block;           
-  margin-left: auto;        
-  margin-right: auto;       
-  width: 70%;         
-  height: 600px;        
-  border-radius: 12px;      
-  object-fit: fill;     
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px 30px;
+  background: linear-gradient(135deg, #e8f5e9, #f1f8ff);
 }
 
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
 
-.w-full {
-    width: 20%;
-    height: 80px;
-    object-fit: fill; 
+.hero p {
+  color: #666;
+}
+
+/* CAROUSEL */
+.carousel {
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* CARDS */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  flex-wrap: wrap;
+}
+
+.custom-card {
+  width: 22rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.custom-card:hover {
+  transform: translateY(-8px);
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-title {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.card-title:hover {
+  color: #4a90e2;
+}
+
+.card-desc {
+  color: #555;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.footer {
+  background: #111;
+  color: #ccc;
+  padding: 30px;
+  text-align: center;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  margin: 0 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-copy {
+  font-size: 14px;
 }

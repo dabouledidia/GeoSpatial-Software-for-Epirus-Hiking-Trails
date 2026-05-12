@@ -38,10 +38,11 @@ public class TrailController {
     @Autowired
     private TrailService trailServiceImpl;
 
-    @GetMapping("/trail_by_id")
-    public ResponseEntity<?> getTrail(@Validated @RequestParam long id){
+    @GetMapping("/trail_by_id/{id}")
+    public ResponseEntity<?> getTrail(@Validated @PathVariable long id){
         try {
-            return ResponseEntity.ok(trailServiceImpl.getTrail(id));
+            TrailDTO trail = trailServiceImpl.getTrail(id);
+            return ResponseEntity.ok(trail);
         } catch (Exception e) {
             logger.error("Error fetching trail with id: {}", id, e);
             return ResponseEntity.internalServerError().body(Map.of("error", "Unable to fetch trail."));

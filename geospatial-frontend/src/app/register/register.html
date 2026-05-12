@@ -1,48 +1,53 @@
-<section class="vh-100">
-  <div class="container py-5 h-100">
-    <div class="row d-flex align-items-center justify-content-center h-100">
-      <div class="col-md-8 col-lg-7 col-xl-6">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-          class="img-fluid" alt="Phone image">
-      </div>
-      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-            <h2 class="card-title mb-4">Add New User</h2>
-            <form [formGroup]="userRegister" (ngSubmit)="register()">
-                
-                <div class="mb-3">
-                    <label for="firstname" class="form-label">First Name</label>
-                    <input type="text" id="firstname" class="form-control" formControlName="firstname" required>
-                </div>
-                    <br/><br/><br/>
+<section class="register-section">
+  <div class="register-container">
 
-                <div class="mb-3">
-                    <label for="lastname" class="form-label">Last Name</label>
-                    <input type="text" id="lastname" class="form-control" formControlName="lastname" required>
-                </div>
-                    <br/><br/><br/>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-control" formControlName="email" required>
-                </div>
-                    <br/><br/><br/>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="text" id="password" class="form-control" formControlName="password" required>
-                </div>
-
-                    <br/><br/><br/>
-
-                <button type="submit" class="btn btn-primary" [disabled]="userRegister.invalid">
-                    Add user
-                </button>
-
-                <br/><br/><br/>
-                <a routerLink="/login"> Already Registered!</a>
- 
-            </form>
-        </div>
+    <!-- IMAGE -->
+    <div class="register-image">
+      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+           alt="Register illustration">
     </div>
-</div>
+
+    <!-- FORM -->
+    <div class="register-form">
+
+      <h2>Create Account 🚀</h2>
+      <p class="subtitle">Join us and start exploring</p>
+
+      <form [formGroup]="userRegister" (ngSubmit)="register()">
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>First Name</label>
+            <input type="text" formControlName="firstname">
+          </div>
+
+          <div class="input-group">
+            <label>Last Name</label>
+            <input type="text" formControlName="lastname">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" formControlName="email">
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" formControlName="password">
+        </div>
+
+        <button type="submit" class="register-btn" [disabled]="userRegister.invalid">
+          Create Account
+        </button>
+
+        <div class="login-link">
+          <span>Already registered?</span>
+          <a routerLink="/login">Login</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
 </section>

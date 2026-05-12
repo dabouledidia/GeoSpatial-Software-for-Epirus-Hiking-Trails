@@ -1,0 +1,302 @@
+.reviews-summary {
+  display: flex;
+  gap: 48px;
+
+  padding: 28px;
+  margin-bottom: 32px;
+
+  background: #fff;
+  border-radius: 24px;
+
+  border: 1px solid #ececec;
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.04),
+    0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* LEFT SIDE */
+
+.summary-left {
+  min-width: 180px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.average-score {
+  font-size: 54px;
+  font-weight: 700;
+  line-height: 1;
+
+  color: #222;
+}
+
+.summary-text {
+  margin-top: 10px;
+
+  font-size: 14px;
+  color: #777;
+}
+
+/* RIGHT SIDE */
+
+.rating-breakdown {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 14px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.star-label {
+  width: 34px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #444;
+}
+
+.bar {
+  flex: 1;
+
+  height: 12px;
+
+  background: #f0f0f0;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  position: relative;
+}
+
+.fill {
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    #ffd54f,
+    #ffc107
+  );
+
+  border-radius: 999px;
+
+  transition: width 0.5s ease;
+}
+
+.count {
+  width: 28px;
+
+  text-align: right;
+
+  font-size: 14px;
+  color: #666;
+}
+
+/* REVIEW CARDS */
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.review-card {
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 22px;
+
+  border: 1px solid #ececec;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.03);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.06);
+}
+
+/* TOP */
+
+.review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #4f8cff,
+    #2d6cdf
+  );
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 16px;
+
+  flex-shrink: 0;
+}
+
+.user-email {
+  font-weight: 600;
+  color: #222;
+}
+
+.review-date {
+  margin-top: 3px;
+
+  font-size: 13px;
+  color: #888;
+}
+
+/* STARS */
+
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  width: 18px;
+  height: 18px;
+
+  fill: #ffc107;
+}
+
+.star-empty {
+  fill: #ddd;
+}
+
+/* COMMENT */
+
+.review-comment {
+  margin: 18px 0;
+
+  line-height: 1.7;
+
+  color: #444;
+
+  font-size: 15px;
+}
+
+/* FOOTER */
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trail-chip {
+  background: #eef4ff;
+  color: #2d6cdf;
+
+  padding: 7px 14px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* DELETE BUTTON */
+
+.del-btn {
+  border: none;
+
+  background: #ff4d4f;
+  color: white;
+
+  padding: 9px 16px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.del-btn:hover {
+  background: #e53935;
+  transform: scale(1.03);
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .reviews-summary {
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .review-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .review-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+.empty-state {
+  padding: 50px;
+
+  text-align: center;
+
+  background: white;
+  border-radius: 24px;
+
+  color: #777;
+
+  border: 1px dashed #ddd;
+}
+.reviews-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}

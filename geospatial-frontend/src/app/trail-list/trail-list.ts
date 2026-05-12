@@ -10,6 +10,11 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog'; 
+
+
+
 
 
 
@@ -17,8 +22,10 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-trail-list',
-  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule, ButtonModule, CardModule, DividerModule, DialogModule],
-  providers: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule, DataViewModule, PaginatorModule,
+    ConfirmDialogModule, ButtonModule, CardModule, DividerModule, DialogModule],
+  providers: [ConfirmationService],
   templateUrl: './trail-list.html',
   styleUrl: './trail-list.css',
 })
@@ -26,7 +33,8 @@ export class TrailList implements OnInit{
 
   trails: Trail[] = [];
 
-  constructor(public userService: UserServices, private trailService: TrailService, private router: Router){}
+  constructor(public userService: UserServices, private trailService: TrailService, private router: Router, private confirmationService: ConfirmationService
+){}
   ngOnInit(): void {
     this.getTrails();
   }
@@ -47,6 +55,11 @@ export class TrailList implements OnInit{
     this.trailService.deleteTrail(id).subscribe(data =>{
       this.getTrails();
     })
+  }
+
+  getTrail(id: number){
+    this.router.navigate([`trail-page/${id}`])
+ 
   }
 
   createReview(id: number){
@@ -76,5 +89,17 @@ showFullComment(text: string) {
   this.fullComment = text;
   this.displayCommentDialog = true;
 }
+
+  confirmDeleteTrail(id: number): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this trail?',
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteTrail(id);
+      }
+    });
+  }
 
 }

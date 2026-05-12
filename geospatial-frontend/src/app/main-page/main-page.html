@@ -1,51 +1,56 @@
-<div class="mb-4 p-8">
-    <p-card header="Welcome To Geospatial-Software for Epirus Hiking Trails!">
-
-    </p-card>
+<!-- HERO -->
+<div class="hero">
+  <h1>🌲 Explore Epirus Trails</h1>
+  <p>Discover the best hiking experiences in Greece</p>
 </div>
 
-<p-carousel [value]="carouselImages" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000">
+<!-- CAROUSEL -->
+<p-carousel 
+  [value]="carouselImages"
+  [numVisible]="1"
+  [numScroll]="1"
+  [circular]="true"
+  [autoplayInterval]="5000"
+  class="carousel">
   <ng-template let-image pTemplate="item">
     <img [src]="image" class="carousel-img" />
   </ng-template>
 </p-carousel>
 
-<div style="display:flex; justify-content:center; gap:20px; padding:40px; flex-wrap:wrap;">
+<!-- CARDS -->
+<div class="cards-container">
 
-    <p-card *ngFor="let card of cards" [style]="{ width: '25rem' }">
+  <p-card *ngFor="let card of cards" class="custom-card">
 
     <ng-template #header>
-      <img [src]="card.image" class="w-full" />
+      <img [src]="card.image" class="card-img" />
     </ng-template>
 
     <ng-template #title>
-      <a [routerLink]="card.link">{{ card.title }}</a>
+      <a [routerLink]="card.link" class="card-title">
+        {{ card.title }}
+      </a>
     </ng-template>
 
-    <p>
+    <p class="card-desc">
       {{ card.description }}
     </p>
 
   </p-card>
 
 </div>
-        
 
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-links">
+    <a (click)="showAbout()">About Us</a>
+    <a (click)="showPrivacy()">Privacy Policy</a>
+    <a (click)="showTerms()">Terms of Service</a>
+  </div>
 
-
-
-<div class="footer flex flex-column align-items-center gap-2 p-4 text-center">
-    
-     <div class="flex justify-content-center text-sm">
-        <a (click)="showAbout()" class="cursor-pointer mx-2">About Us</a>
-        <a (click)="showPrivacy()" class="cursor-pointer mx-2">Privacy Policy</a>
-        <a (click)="showTerms()" class="cursor-pointer mx-2">Terms of Service</a>
-    </div>
-
-    <div class="text-sm text-500 mx-3">
-         © 2026 Provided by @dtsantas
-    </div>
-
+  <div class="footer-copy">
+    © 2026 Provided by @dtsantas
+  </div>
 </div>
 
 <p-dialog header="About Us" [modal]="true" [(visible)]="aboutVisible"

@@ -15,6 +15,7 @@ import { UserManagement } from './user-management/user-management';
 import { authGuard } from './guards/auth.guard'; 
 import { Profile } from './profile/profile';
 import { ExploreTrails } from './explore-trails/explore-trails';
+import { TrailPage } from './trail/trail';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'main-page', pathMatch: 'full'},
@@ -27,6 +28,8 @@ export const routes: Routes = [
     {path: 'login', component: Login},
     {path: 'register', component: Register},
     {path: 'explore-trails', component: ExploreTrails},
+    {path: 'trail-page/:id', component: TrailPage},
+
 
     
     // Protected Routes (Apply canActivate)

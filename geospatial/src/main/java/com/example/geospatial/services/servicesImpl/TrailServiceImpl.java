@@ -29,8 +29,21 @@ public class TrailServiceImpl implements TrailService{
         }
     }
 
-    public Optional<Trail> getTrail(long id) {
-        return trailRepository.findById(id);
+    public TrailDTO getTrail(long id) {
+    Trail trail = trailRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Trail not found with id: " + id));
+
+    return new TrailDTO(
+        trail.getId(),
+        trail.getName(),
+        trail.getLocation(),
+        trail.getLengthKm(),
+        trail.getDuration(),
+        trail.getDifficulty(),
+        trail.getDescription(),
+        trail.getUser().getEmail(),
+        trail.getImage()
+        );
     }
 
     @Override

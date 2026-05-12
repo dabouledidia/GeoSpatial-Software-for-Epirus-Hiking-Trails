@@ -1,0 +1,90 @@
+<p-confirmDialog />
+
+<div *ngIf="trail; else loading" class="container">
+  <p-card class="trail-card">
+
+    <ng-template #header>
+      <img [src]="'http://localhost:8080/' + trail.image" class="header-img" />
+    </ng-template>
+
+    <ng-template #title>
+      <div class="title">{{ trail.trailName }}</div>
+    </ng-template>
+
+    <div class="trail-info">
+      <div><strong>📍 Location:</strong> {{ trail.location }}</div>
+      <div><strong>📏 Length:</strong> {{ trail.lengthKm }} km</div>
+      <div><strong>⏱ Duration:</strong> {{ trail.duration }} H</div>
+      <div><strong>🔥 Difficulty:</strong> {{ trail.difficulty }}</div>
+    </div>
+
+    <div class="description">
+      <strong>Description:</strong>
+      <p>{{ trail.description }}</p>
+    </div>
+
+    <div class="map-container">
+      <app-map-view [searchLocation]="trail.location" [trailName]="trail.trailName">
+      </app-map-view>
+    </div>
+
+    <div class="actions">
+      <button pButton label="Create Review" icon="pi pi-pencil" (click)="createReview(trail.id!)"></button>
+      <button pButton label="Reviews" icon="pi pi-comments" class="p-button-secondary"
+              (click)="getReviews(trail.id!)"></button>
+      <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+              pButton label="Delete" icon="pi pi-trash" class="p-button-danger"
+              (click)="confirmDeleteTrail(trail.id!)"></button>
+    </div>
+
+  </p-card>
+</div>
+
+<ng-template #loading>
+  <div class="loading"><p-progressSpinner /></div>
+</ng-template>
+
+<div class="photos-header">
+  <h3 class="photos-title">📸 Photos</h3>
+
+  <div *ngIf="trail && (userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email)"
+       class="upload-area">
+
+    <label class="upload-trigger" [class.selected]="selectedImages.length > 0">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <ng-container *ngIf="selectedImages.length === 0">
+          <path d="M8 2v9M4 6l4-4 4 4"/><path d="M2 13h12"/>
+        </ng-container>
+        <ng-container *ngIf="selectedImages.length > 0">
+          <path d="M2 11l4-4 3 3 2-2 3 3"/><circle cx="11.5" cy="4.5" r="1.5"/>
+        </ng-container>
+      </svg>
+      {{ selectedImages.length > 0 ? selectedImages.length + ' photos selected' : 'Add photos' }}
+      <input type="file" multiple accept="image/*" (change)="onImagesSelect($event)" hidden />
+    </label>
+
+    <button class="upload-btn" [class.visible]="selectedImages.length > 0"
+            (click)="addImages(trail.id!)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M8 2v9M4 6l4-4 4 4"/><path d="M2 13h12"/>
+      </svg>
+      Upload
+    </button>
+
+  </div>
+</div>
+
+
+<p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true" class="carousel">
+  <ng-template pTemplate="item" let-img>
+    <div class="carousel-item">
+      <img [src]="'http://localhost:8080/uploads/' + img.imageURL"
+           [alt]="trail.trailName" class="carousel-img" />
+      <button *ngIf="userService.getRole() === 'ROLE_ADMIN'"
+              pButton class="delete-photo-btn"
+              pTooltip="Delete photo"
+              (click)="confirmDeleteImage(img.id)">✕</button>
+    </div>
+  </ng-template>
+</p-carousel>
+

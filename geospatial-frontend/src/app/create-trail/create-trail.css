@@ -1,0 +1,129 @@
+.form-wrap {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.form-header {
+  margin-bottom: 28px;
+}
+
+.form-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 4px;
+}
+
+.form-subtitle {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #111;
+}
+
+.form-input {
+  padding: 9px 12px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #111;
+  background: white;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  border-color: #1D9E75;
+  box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.1);
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 90px;
+}
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.error-msg {
+  font-size: 11px;
+  color: #c0392b;
+}
+
+.form-divider {
+  grid-column: 1 / -1;
+  border: none;
+  border-top: 1px solid #ebebeb;
+  margin: 4px 0;
+}
+
+.submit-btn {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px;
+  background: #1D9E75;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.submit-btn:hover { background: #178a65; }
+.submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+.submit-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.custom-upload .p-button {
+  background: transparent;
+  border: 1.5px dashed #ccc;
+  color: #888;
+  font-size: 13px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  box-shadow: none;
+}
+
+.custom-upload .p-button:hover {
+  background: #f0fdf8;
+  border-color: #1D9E75;
+  color: #1D9E75;
+}
