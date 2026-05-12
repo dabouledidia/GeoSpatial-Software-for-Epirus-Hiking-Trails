@@ -91,3 +91,23 @@
   display: flex;
   gap: 10px;
 }
+.avatar-initials {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.avatar-initials--lg {
+  width: 70px;
+  height: 70px;
+  font-size: 26px;
+}

@@ -22,10 +22,14 @@ import { ToastModule } from 'primeng/toast';
 
 export class CreateTrail {
   
+  selectedFile: File | null = null;
+
+  
   onFileSelect(event: any) {
   const file = event.files[0];
 
   if (file) {
+    this.selectedFile = file;
     this.trailForm.patchValue({
       image: file
     });

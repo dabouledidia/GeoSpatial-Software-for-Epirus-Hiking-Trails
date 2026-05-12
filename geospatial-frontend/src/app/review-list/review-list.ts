@@ -32,6 +32,8 @@ export class ReviewList implements OnInit{
 
   getUserReviews() {
     this.reviewService.getUserReviews().subscribe((data: Review[]) =>{
+                this.calculateReviewStats(); 
+
           this.reviews = data;
         })
   }
@@ -40,6 +42,7 @@ export class ReviewList implements OnInit{
   getReviews(trailId: number){
     this.reviewService.getReviews(trailId).subscribe((data: Review[]) =>{
           this.reviews = data;
+          this.calculateReviewStats(); 
         })
   }
 
@@ -55,6 +58,42 @@ displayCommentDialog: boolean = false;
 showFullComment(text: string) {
   this.fullComment = text;
   this.displayCommentDialog = true;
+}
+
+averageRating = 0;
+
+ratingCounts: Record<number, number> = {  5: 0,
+  4: 0,
+  3: 0,
+  2: 0,
+  1: 0
+};
+
+calculateReviewStats() {
+
+  if (!this.reviews.length) {
+    this.averageRating = 0;
+    return;
+  }
+
+  const total = this.reviews.reduce(
+    (sum, r) => sum + r.rating,
+    0
+  );
+
+  this.averageRating = total / this.reviews.length;
+
+  this.ratingCounts = {
+    5: 0,
+    4: 0,
+    3: 0,
+    2: 0,
+    1: 0
+  };
+
+  this.reviews.forEach(r => {
+    this.ratingCounts[r.rating]++;
+  });
 }
 
   

@@ -30,7 +30,7 @@ private apiUrl = 'http://localhost:8080/';
         return this.http.post(this.apiUrl + "addTrailImage/", image)
     }
 
-     getTrail(id: number): Observable<any>{
+    getTrail(id: number): Observable<any>{
         return this.http.get<any>(this.apiUrl + "trail_by_id/"+ id)
     }
 
@@ -43,5 +43,8 @@ private apiUrl = 'http://localhost:8080/';
 
     getImagesByTrail(trailId: number): Observable<any[]>{
         return this.http.get<any[]>(this.apiUrl + "images_by_trail/" + trailId)
+    }
+    deleteImage(trailId: number): Observable<any>{
+        return this.http.delete(this.apiUrl + "deleteImage/" + trailId)
     }
 }

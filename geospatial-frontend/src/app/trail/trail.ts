@@ -11,13 +11,18 @@ import { MapViewComponent } from '../map-view/map-view.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CarouselModule } from 'primeng/carousel';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
 @Component({
   selector: 'app-trail',
   standalone: true,
-  imports: [CommonModule,CarouselModule, ProgressSpinnerModule, FileUploadModule, RouterModule, CommonModule, RouterModule, DataViewModule, ButtonModule, CardModule, MapViewComponent],
+  imports: [CommonModule,CarouselModule, ConfirmDialogModule, 
+    ProgressSpinnerModule, FileUploadModule, RouterModule, CommonModule, 
+    RouterModule, DataViewModule, ButtonModule, CardModule, MapViewComponent],
+    providers: [ConfirmationService],
   templateUrl: './trail.html',
   styleUrl: './trail.css',
 })
@@ -41,7 +46,8 @@ export class TrailPage implements OnInit {
     public userService: UserServices,
     private trailService: TrailService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private confirmationService: ConfirmationService
   ) {}
 
 ngOnInit(): void {
@@ -74,9 +80,21 @@ getTrail(id: number) {
   });
 }
 
-  deleteTrail(id: number){
-    this.trailService.deleteTrail(id)
-    this.router.navigate([`trail-list/${id}`])
+  deleteTrail(id: number) {
+  this.trailService.deleteTrail(id).subscribe({
+    next: () => {
+      this.router.navigate(['trail-list']);
+    },
+    error: (err) => {
+      console.error('Delete failed', err);
+    }
+  });
+}
+
+  deleteImage(imageId: number): void {
+  this.trailService.deleteImage(imageId).subscribe(() => {
+    this.images = this.images.filter(img => img.id !== imageId);
+    });
   }
 
   getReviews(id: number){
@@ -101,4 +119,28 @@ getTrail(id: number) {
     }
   });
 }
+  confirmDeleteTrail(id: number): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this trail?',
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteTrail(id);
+      }
+    });
+  }
+
+  confirmDeleteImage(imageId: number): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this photo?',
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteImage(imageId);
+      }
+    });
+  }
+
 }

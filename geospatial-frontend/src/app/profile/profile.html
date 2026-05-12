@@ -2,11 +2,9 @@
 
   <!-- HEADER -->
   <div class="profile-header">
-    <p-avatar 
-      image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-      shape="circle"
-      size="xlarge">
-    </p-avatar>
+    <div class="avatar-initials avatar-initials--lg">
+      {{ userService.getUser()?.[0]?.toUpperCase() }}
+    </div>
 
     <h2>{{ userService.getUser() }}</h2>
     <p class="role">{{ userService.getRole() }}</p>

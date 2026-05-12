@@ -38,7 +38,7 @@
         <button class="btn-action btn-primary" (click)="createReview(trail.id!)">Create review</button>
         <button class="btn-action" (click)="getReviews(trail.id!)">Reviews</button>
         <button *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-          class="btn-action btn-danger" (click)="deleteTrail(trail.id!)">Delete</button>
+          class="btn-action btn-danger" (click)="confirmDeleteTrail(trail.id!)">Delete</button>
       </div>
     </div>
   </div>
@@ -52,3 +52,5 @@
 <p-dialog header="Full description" [(visible)]="displayCommentDialog" [style]="{width: '30vw'}">
   <p>{{ fullComment }}</p>
 </p-dialog>
+
+<p-confirmDialog />
