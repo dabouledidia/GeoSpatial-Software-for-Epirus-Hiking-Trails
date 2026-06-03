@@ -36,6 +36,14 @@
               pButton label="Delete" icon="pi pi-trash" class="p-button-danger"
               (click)="confirmDeleteTrail(trail.id!)"></button>
     </div>
+    <button
+    *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
+    pButton
+    label="Edit Route"
+    icon="pi pi-map"
+    class="p-button-info"
+    [routerLink]="['/trail', trail.id, 'map-editor']">
+  </button>
 
   </p-card>
 </div>
@@ -87,4 +95,6 @@
     </div>
   </ng-template>
 </p-carousel>
+
+
 

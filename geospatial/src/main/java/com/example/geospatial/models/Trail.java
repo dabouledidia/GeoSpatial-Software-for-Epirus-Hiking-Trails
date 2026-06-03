@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -60,6 +61,11 @@ public class Trail {
     @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY )
     @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OrderBy("pointOrder ASC")
+    private List<Trailpoint> trailPoints = new ArrayList<>();
 
     public Trail(){}
 
@@ -170,6 +176,14 @@ public class Trail {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Trailpoint> getTrailPoints() {
+    return trailPoints;
+}
+ 
+    public void setTrailPoints(List<Trailpoint> trailPoints) {
+        this.trailPoints = trailPoints;
     }
 
     

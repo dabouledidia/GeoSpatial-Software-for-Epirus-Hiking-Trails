@@ -1,0 +1,88 @@
+<div class="editor-layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <button class="back-btn" [routerLink]="['/trail-page', trailId]">← Back</button>
+      <h2 class="trail-title">{{ trailName || 'Trail Route Editor' }}</h2>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-card" *ngIf="distanceKm > 0">
+      <span class="stat-label">Total distance</span>
+      <span class="stat-value">{{ distanceKm }} km</span>
+    </div>
+
+    <!-- Draw section -->
+    <div class="section">
+      <h3 class="section-title">Draw Route</h3>
+      <p class="section-hint">Click on the map to place points. Right-click a point to remove it.</p>
+
+      <div class="btn-row" *ngIf="mode !== 'draw'">
+        <button class="btn-primary" (click)="startDrawing()">
+          ✏️ Start Drawing
+        </button>
+      </div>
+
+      <div *ngIf="mode === 'draw'" class="draw-controls">
+        <div class="draw-badge">
+          <span class="dot"></span> Drawing mode — {{ drawnPoints.length }} points
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" (click)="undoLastPoint()" [disabled]="drawnPoints.length === 0">
+            ↩ Undo
+          </button>
+          <button class="btn-danger-outline" (click)="clearDrawnPoints()" [disabled]="drawnPoints.length === 0">
+            🗑 Clear
+          </button>
+        </div>
+        <button class="btn-outline" (click)="stopDrawing()">Stop Drawing</button>
+      </div>
+    </div>
+
+    <div class="divider">or</div>
+
+    <!-- GPX section -->
+    <div class="section">
+      <h3 class="section-title">Import GPX</h3>
+      <p class="section-hint">Upload a .gpx file from Wikiloc, AllTrails, Komoot, etc.</p>
+
+      <label class="gpx-upload" [class.has-file]="gpxFileName">
+        <span class="upload-icon">📂</span>
+        <span class="upload-text">{{ gpxFileName || 'Choose GPX file' }}</span>
+        <input type="file" accept=".gpx" (change)="onGpxSelected($event)" hidden />
+      </label>
+    </div>
+
+    <!-- Messages -->
+    <div class="success-msg" *ngIf="saveSuccess">
+      ✅ Route saved successfully!
+    </div>
+    <div class="error-msg" *ngIf="errorMessage">
+      ⚠️ {{ errorMessage }}
+    </div>
+
+    <!-- Save -->
+    <button
+      class="btn-save"
+      (click)="saveRoute()"
+      [disabled]="!canSave || isSaving"
+    >
+      <span *ngIf="!isSaving">💾 Save Route</span>
+      <span *ngIf="isSaving">Saving...</span>
+    </button>
+
+  </div>
+
+  <!-- Map -->
+  <div class="map-area">
+    <div class="loading-overlay" *ngIf="isLoading">
+      <span class="spinner"></span> Loading existing route...
+    </div>
+    <div class="draw-hint" *ngIf="mode === 'draw'">
+      Click to add points &nbsp;·&nbsp; Right-click a point to remove &nbsp;·&nbsp; Drag to reposition
+    </div>
+    <div #mapContainer class="map-container"></div>
+  </div>
+
+</div>
