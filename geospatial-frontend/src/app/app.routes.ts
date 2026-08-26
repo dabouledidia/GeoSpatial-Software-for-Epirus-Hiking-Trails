@@ -16,7 +16,7 @@ import { authGuard } from './guards/auth.guard';
 import { Profile } from './profile/profile';
 import { ExploreTrails } from './explore-trails/explore-trails';
 import { TrailPage } from './trail/trail';
-import { TrailMapEditorComponent } from './trail-map-editor/trail-map-editor';
+import { TrailMapComponent } from './trail-map-editor/trail-map-editor';
 
 
 export const routes: Routes = [
@@ -31,7 +31,7 @@ export const routes: Routes = [
     {path: 'register', component: Register},
     {path: 'explore-trails', component: ExploreTrails},
     {path: 'trail-page/:id', component: TrailPage},
-    {path: 'trail/:id/map-editor', component: TrailMapEditorComponent},
+    {path: 'trail/:id/map-editor', component: TrailMapComponent},
 
 
     

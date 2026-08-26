@@ -7,12 +7,12 @@ import { Trail } from '../models/trail.model';
 import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { MapViewComponent } from '../map-view/map-view.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CarouselModule } from 'primeng/carousel';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TrailMapComponent } from '../trail-map-editor/trail-map-editor';
 
 
 
@@ -21,7 +21,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   standalone: true,
   imports: [CommonModule,CarouselModule, ConfirmDialogModule, 
     ProgressSpinnerModule, FileUploadModule, RouterModule, CommonModule, 
-    RouterModule, DataViewModule, ButtonModule, CardModule, MapViewComponent],
+    RouterModule, DataViewModule, ButtonModule, CardModule, TrailMapComponent],
     providers: [ConfirmationService],
   templateUrl: './trail.html',
   styleUrl: './trail.css',
