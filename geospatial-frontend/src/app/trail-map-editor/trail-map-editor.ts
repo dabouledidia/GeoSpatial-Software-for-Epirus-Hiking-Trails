@@ -16,13 +16,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, interval } from 'rxjs';
+import { takeUntil, switchMap, startWith } from 'rxjs/operators';
 import { TrailService } from '../services/trail.service';
 import { AnnotationService } from '../services/trail-annotation.service';
+import { TrailAnnotation } from '../models/trail-annotation.model';
 
 import maplibregl, { Map, Marker, GeoJSONSource } from 'maplibre-gl';
-import { TrailAnnotation } from '../models/trail-annotation.model';
 
 /* =========================================================
    DRAW POINT
@@ -67,7 +67,10 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   /* ===== Inputs ===== */
 
-  @Input() gpxUrl?: string;
+  // Whether this trail already has a GPX file saved server-side.
+  // Drives the load-on-init branch below: GPX file vs. drawn DB points.
+  @Input() hasGpxFile = false;
+
   @Input() center: [number, number] = [22.9, 40.6];
   @Input() zoom = 12;
   @Input() trackColor = '#f97316';
@@ -164,8 +167,8 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     if (!this.map) {
       return;
     }
-    if (changes['gpxUrl'] && this.gpxUrl) {
-      this.loadGpxFromUrl();
+    if (changes['hasGpxFile'] && this.hasGpxFile) {
+      this.loadGpxFromBackend();
     }
   }
 
@@ -204,10 +207,19 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         this.initTrackLayer();
         this.initAnnotationLayer();
 
-        if (this.gpxUrl) {
-          this.loadGpxFromUrl();
+        // Two ways a trail's route can exist: an imported GPX file, or
+        // points the user drew and saved to the DB. hasGpxFile decides
+        // which one to fetch — both funnel into displayTrack() below.
+        if (this.hasGpxFile) {
+          this.loadGpxFromBackend();
         } else if (this.trailId) {
           this.loadExistingPoints();
+        }
+
+        // Annotations are independent of the route source (GPX or drawn
+        // points), so poll for them regardless of which branch ran above.
+        if (this.trailId) {
+          this.startAnnotationPolling();
         }
 
         if (this._searchLocation) {
@@ -315,7 +327,7 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       const props = feature.properties as Record<string, string>;
       const coords = (feature.geometry as any).coordinates;
 
-      const annotation = this.annotations.find(a => a.id === props['id']);
+      const annotation = this.annotations.find(a => String(a.id) === String(props['id']));
       const canDelete = !this.currentUserId || annotation?.createdBy === this.currentUserId;
 
       // Escape anything that originated as free-text user input before it goes
@@ -385,7 +397,7 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   /* =======================================================
-     LOAD EXISTING ROUTE
+     LOAD EXISTING ROUTE (drawn points saved in DB)
      ======================================================= */
 
   private loadExistingPoints(): void {
@@ -405,23 +417,30 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
           this.isLoading = false;
         }
       });
-
-    this.loadAnnotations();
   }
 
-  /** Fetches this trail's annotations from the backend so every viewer sees
-   *  the same set, instead of each browser only holding its own local copy. */
-  private loadAnnotations(): void {
-    this.annotationService.getAnnotations(this.trailId)
-      .pipe(takeUntil(this.destroy$))
+  /** Refreshes this trail's annotations on an interval, so annotations
+   *  added or deleted by other users show up without a page reload.
+   *  startWith(0) makes it fire immediately, then every intervalMs after. */
+  private readonly annotationPollIntervalMs = 15000;
+
+  private startAnnotationPolling(): void {
+    interval(this.annotationPollIntervalMs)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.annotationService.getAnnotations(this.trailId)),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: (annotations) => {
-          this.annotations = annotations;
-          this.refreshAnnotationSource();
-        },
-        error: () => {
-          this.errorMessage = 'Could not load points of interest.';
+          this.zone.run(() => {
+            this.annotations = annotations;
+            this.refreshAnnotationSource();
+          });
         }
+        // Deliberately no error handler that sets errorMessage here —
+        // a single missed poll shouldn't flash an error banner. If a poll
+        // fails, switchMap just waits for the next tick to try again.
       });
   }
 
@@ -515,7 +534,8 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   /* =======================================================
-     GPX
+     GPX — local file preview (user picks a file from disk,
+     before it's ever saved to the backend)
      ======================================================= */
 
   onGpxSelected(event: Event): void {
@@ -550,28 +570,49 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     reader.readAsText(file);
   }
 
-  private loadGpxFromUrl(): void {
-    if (!this.gpxUrl) {
+  /* =======================================================
+     GPX — already-saved file, fetched from the backend
+     ======================================================= */
+
+  private loadGpxFromBackend(): void {
+    if (!this.trailId) {
       return;
     }
 
     this.isLoading = true;
 
-    this.http.get(this.gpxUrl, { responseType: 'text' })
+    this.trailService.getGpxFile(this.trailId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (gpxText) => {
-          const coords = this.parseGpx(gpxText);
-          this.zone.run(() => {
-            this.isLoading = false;
-            if (coords.length) {
-              this.displayTrack(coords, 40);
-            }
-          });
+        next: (blob) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            this.zone.run(() => {
+              const gpxText = reader.result as string;
+              const coords = this.parseGpx(gpxText);
+
+              this.isLoading = false;
+
+              if (coords.length) {
+                this.displayTrack(coords, 40);
+              }
+            });
+          };
+
+          reader.onerror = () => {
+            this.zone.run(() => {
+              this.isLoading = false;
+              this.errorMessage = 'Failed to read GPX file.';
+            });
+          };
+
+          reader.readAsText(blob);
         },
         error: () => {
           this.zone.run(() => {
             this.isLoading = false;
+            // A GPX file might not exist yet, so don't necessarily treat this as fatal
           });
         }
       });
@@ -785,7 +826,14 @@ export class TrailMapComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       .subscribe({
         next: () => {
           this.zone.run(() => {
-            this.annotations = this.annotations.filter(annotation => annotation.id !== id);
+            // Compare as strings — ids arrive from the backend as JSON
+            // numbers at runtime even though TrailAnnotation.id is typed
+            // as string, and the popup's onclick always stringifies the id
+            // when building its HTML attribute. A strict !== here would
+            // silently never match and never actually remove anything.
+            this.annotations = this.annotations.filter(
+              annotation => String(annotation.id) !== String(id)
+            );
             this.refreshAnnotationSource();
             document.querySelectorAll('.maplibregl-popup').forEach(popup => popup.remove());
           });

@@ -6,8 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import com.example.geospatial.DTO.AnnotationDTO;
@@ -35,27 +34,26 @@ public class AnnotationServiceImpl implements AnnotationService {
     }
 
     @Override
-    public ResponseEntity<?> deleteAnnotation(long id) {
+    public ResponseEntity<?> deleteAnnotation(long id, User currentUser) {
         Optional<Annotation> existingAnnotationOpt = annotationRepository.findById(id);
         if (existingAnnotationOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Annotation with id " + id + " not found");
         }
 
-        // Annotation existing = existingAnnotationOpt.get();
-        // User currentUser = getCurrentUser();
+        Annotation existing = existingAnnotationOpt.get();
 
-        // if (currentUser == null || existing.getUser() == null
-        //     || !existing.getUser().getId().equals(currentUser.getId())) {
-        //     return ResponseEntity.status(HttpStatus.FORBIDDEN)
-        //         .body("You do not have permission to delete this annotation");
-        // }
+        if (existing.getUser() == null
+            || !existing.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("You do not have permission to delete this annotation");
+        }
 
         annotationRepository.deleteById(id);
-        return ResponseEntity.ok("Deleted");
+        return ResponseEntity.noContent().build();
     }
 
-
+   
     private AnnotationDTO toDto(Annotation r) {
         String createdBy = r.getUser() != null ? String.valueOf(r.getUser().getId()) : null;
 
@@ -70,13 +68,5 @@ public class AnnotationServiceImpl implements AnnotationService {
             r.getTitle(),
             createdBy
         );
-    }
-
-    private User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
-            return null;
-        }
-        return (User) auth.getPrincipal();
     }
 }

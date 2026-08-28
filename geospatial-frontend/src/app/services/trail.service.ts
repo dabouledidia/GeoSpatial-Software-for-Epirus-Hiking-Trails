@@ -62,4 +62,11 @@ private apiUrl = 'http://localhost:8080/';
     formData.append('file', file);
     return this.http.post<any[]>(this.apiUrl + `api/trails/${trailId}/points/gpx`, formData);
     }
+
+    getGpxFile(trailId: number): Observable<Blob> {
+    return this.http.get(
+        this.apiUrl + `api/trails/${trailId}/points/gpx`,
+        { responseType: 'blob' }
+    );
+    }
 }

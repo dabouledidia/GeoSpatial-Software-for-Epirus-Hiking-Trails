@@ -11,9 +11,15 @@ public class TrailDTO {
     private String description;
     private String email;
     private String image;
-    
+
+    // True if this trail has an imported GPX file on disk. The frontend
+    // uses this to decide whether to bind [gpxUrl] (fetch the raw file)
+    // or fall back to loading drawn points — never both. Deliberately
+    // not exposing the actual file path here.
+    private boolean hasGpxFile;
+
     public TrailDTO(Long id, String trailName, String location, double lengthKm, double duration, String difficulty,
-            String description, String email, String image) {
+            String description, String email, String image, boolean hasGpxFile) {
         this.id = id;
         this.trailName = trailName;
         this.location = location;
@@ -23,6 +29,7 @@ public class TrailDTO {
         this.description = description;
         this.email = email;
         this.image = image;
+        this.hasGpxFile = hasGpxFile;
     }
 
     public Long getId() {
@@ -97,5 +104,12 @@ public class TrailDTO {
         this.image = image;
     }
 
-    
+    public boolean isHasGpxFile() {
+        return hasGpxFile;
+    }
+
+    public void setHasGpxFile(boolean hasGpxFile) {
+        this.hasGpxFile = hasGpxFile;
+    }
+
 }

@@ -1,17 +1,20 @@
 package com.example.geospatial.services;
 
-import java.util.List;
-
+import com.example.geospatial.DTO.TrailpointDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.geospatial.DTO.TrailpointDTO;
+import java.util.List;
 
 public interface TrailpointService {
 
-    public List<TrailpointDTO> getPointsByTrail(Long trailId);
-    public List<TrailpointDTO> savePoints(Long trailId, List<TrailpointDTO> points);
-    public List<TrailpointDTO> importGpx(Long trailId, MultipartFile file) throws Exception;
-    public Double calculateDistance(Long trailId);
-    
+    List<TrailpointDTO> getPointsByTrail(Long trailId);
 
+    List<TrailpointDTO> savePoints(Long trailId, List<TrailpointDTO> points);
+
+
+    String importGpx(Long trailId, MultipartFile file) throws Exception;
+
+    byte[] getGpxFile(Long trailId) throws Exception;
+
+    Double calculateDistance(Long trailId);
 }

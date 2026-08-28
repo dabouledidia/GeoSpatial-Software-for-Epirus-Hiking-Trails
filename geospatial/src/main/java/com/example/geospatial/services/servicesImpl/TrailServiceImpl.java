@@ -12,6 +12,7 @@ import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.User;
 import com.example.geospatial.repositories.TrailRepository;
+import com.example.geospatial.services.FileStorageService;
 import com.example.geospatial.services.TrailService;
 
 @Service
@@ -19,6 +20,9 @@ public class TrailServiceImpl implements TrailService{
 
     @Autowired
     private TrailRepository trailRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public ResponseEntity<?> createTrail(Trail trail){
         try {
@@ -42,7 +46,8 @@ public class TrailServiceImpl implements TrailService{
         trail.getDifficulty(),
         trail.getDescription(),
         trail.getUser().getEmail(),
-        trail.getImage()
+        trail.getImage(),
+        trail.getGpxPath() != null
         );
     }
 
@@ -60,7 +65,8 @@ public class TrailServiceImpl implements TrailService{
             r.getDifficulty(),
             r.getDescription(),
             r.getUser().getEmail(),
-            r.getImage()
+            r.getImage(),
+            r.getGpxPath() != null
         )
     ).toList();
     }
@@ -78,7 +84,8 @@ public class TrailServiceImpl implements TrailService{
             r.getDifficulty(),
             r.getDescription(),
             r.getUser().getEmail(),
-            r.getImage()
+            r.getImage(),
+            r.getGpxPath() != null
         )
     ).toList();
     }
@@ -114,6 +121,20 @@ public class TrailServiceImpl implements TrailService{
         if (existingTrailOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Trail with id " + id + " not found");
+        }
+
+        Trail existingTrail = existingTrailOpt.get();
+
+        // JPA cascade (orphanRemoval) cleans up related rows like
+        // Trailpoint/Review, but the raw GPX file on disk isn't a JPA
+        // relation — it has to be removed explicitly or it's orphaned.
+        if (existingTrail.getGpxPath() != null) {
+            try {
+                fileStorageService.deleteFile(existingTrail.getGpxPath());
+            } catch (Exception ignored) {
+                // Don't block trail deletion over a file-cleanup failure —
+                // worst case is a stray file on disk, not a data integrity issue.
+            }
         }
 
         trailRepository.deleteById(id);

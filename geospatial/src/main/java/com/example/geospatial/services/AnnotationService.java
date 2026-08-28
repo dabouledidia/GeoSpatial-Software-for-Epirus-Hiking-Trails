@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.geospatial.DTO.AnnotationDTO;
 import com.example.geospatial.models.Annotation;
+import com.example.geospatial.models.User;
 
 public interface AnnotationService {
 
@@ -13,7 +14,7 @@ public interface AnnotationService {
 
     public List<AnnotationDTO> getAnnotations(long trailId);
 
-    public ResponseEntity<?> deleteAnnotation(long id);
+    public ResponseEntity<?> deleteAnnotation(long id, User currentUser);
 
 
 }

@@ -8,4 +8,5 @@ export interface Trail{
     description: string;
     email: string;
     image: File;
+    hasGpxFile: boolean;
 }

@@ -5,30 +5,32 @@ import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.Trailpoint;
 import com.example.geospatial.repositories.TrailPointRepository;
 import com.example.geospatial.repositories.TrailRepository;
+import com.example.geospatial.services.FileStorageService;
 import com.example.geospatial.services.TrailpointService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TrailpointServiceImpl implements TrailpointService{
+public class TrailpointServiceImpl implements TrailpointService {
 
     private final TrailPointRepository trailPointRepository;
     private final TrailRepository trailRepository;
+    private final FileStorageService fileStorageService;
 
-    public TrailpointServiceImpl(TrailPointRepository trailPointRepository, TrailRepository trailRepository) {
+    public TrailpointServiceImpl(
+            TrailPointRepository trailPointRepository,
+            TrailRepository trailRepository,
+            FileStorageService fileStorageService) {
         this.trailPointRepository = trailPointRepository;
         this.trailRepository = trailRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     // Get all points for a trail
@@ -45,6 +47,20 @@ public class TrailpointServiceImpl implements TrailpointService{
         Trail trail = trailRepository.findById(trailId)
                 .orElseThrow(() -> new RuntimeException("Trail not found: " + trailId));
 
+        // A trail is represented either by drawn points or by an imported
+        // GPX file, not both. If this trail previously had a GPX file,
+        // drop it now so the two representations can't disagree.
+        if (trail.getGpxPath() != null) {
+            try {
+                fileStorageService.deleteFile(trail.getGpxPath());
+            } catch (Exception ignored) {
+                // Stale file on disk isn't worth failing the save over —
+                // the DB reference is what matters and is cleared below.
+            }
+            trail.setGpxPath(null);
+            trailRepository.save(trail);
+        }
+
         trailPointRepository.deleteAllByTrailId(trailId);
 
         List<Trailpoint> entities = new ArrayList<>();
@@ -59,58 +75,42 @@ public class TrailpointServiceImpl implements TrailpointService{
                 .collect(Collectors.toList());
     }
 
-    // Import from GPX file
+    // Import a GPX file: store it on disk as-is and remember its path.
+    // No longer parsed into individual point rows — the file is served
+    // back raw and parsed client-side (TrailMapComponent.parseGpx already
+    // does this via the gpxUrl input).
     @Transactional
-    public List<TrailpointDTO> importGpx(Long trailId, MultipartFile file) throws Exception {
+    public String importGpx(Long trailId, MultipartFile file) throws Exception {
         Trail trail = trailRepository.findById(trailId)
                 .orElseThrow(() -> new RuntimeException("Trail not found: " + trailId));
 
-        List<Trailpoint> points = parseGpx(file.getInputStream(), trail);
-
+        // Same reasoning as above, reversed: importing a file replaces
+        // any previously drawn points.
         trailPointRepository.deleteAllByTrailId(trailId);
-        List<Trailpoint> saved = trailPointRepository.saveAll(points);
 
-        return saved.stream()
-                .map(p -> new TrailpointDTO(p.getId(), p.getPointOrder(), p.getLat(), p.getLng(), p.getElevation()))
-                .collect(Collectors.toList());
+        String path = fileStorageService.storeGpxFile(trailId, file);
+        trail.setGpxPath(path);
+        trailRepository.save(trail);
+
+        return path;
     }
 
-    // Parse GPX file into TrailPoint list
-    private List<Trailpoint> parseGpx(InputStream inputStream, Trail trail) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(inputStream);
-        doc.getDocumentElement().normalize();
+    public byte[] getGpxFile(Long trailId) throws Exception {
+        Trail trail = trailRepository.findById(trailId)
+                .orElseThrow(() -> new RuntimeException("Trail not found: " + trailId));
 
-        // Try trkpt first, then rtept
-        NodeList nodes = doc.getElementsByTagName("trkpt");
-        if (nodes.getLength() == 0) {
-            nodes = doc.getElementsByTagName("rtept");
+        if (trail.getGpxPath() == null) {
+            throw new FileNotFoundException("No GPX file stored for trail " + trailId);
         }
 
-        List<Trailpoint> points = new ArrayList<>();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            org.w3c.dom.Element el = (org.w3c.dom.Element) nodes.item(i);
-            double lat = Double.parseDouble(el.getAttribute("lat"));
-            double lng = Double.parseDouble(el.getAttribute("lon"));
-
-            Double elevation = null;
-            NodeList eleNodes = el.getElementsByTagName("ele");
-            if (eleNodes.getLength() > 0) {
-                elevation = Double.parseDouble(eleNodes.item(0).getTextContent().trim());
-            }
-
-            points.add(new Trailpoint(trail, i, lat, lng, elevation));
-        }
-
-        if (points.isEmpty()) {
-            throw new RuntimeException("No track points found in GPX file");
-        }
-
-        return points;
+        return fileStorageService.readFile(trail.getGpxPath());
     }
 
-    // Calculate total distance in km from saved points
+    // Calculate total distance in km from saved points.
+    // NOTE: only meaningful for point-based trails now — a GPX-imported
+    // trail has no trail_points rows, so this returns 0.0 for those.
+    // Distance for GPX-imported trails is computed client-side instead
+    // (see TrailMapComponent.calculateDistance, run against the parsed file).
     public Double calculateDistance(Long trailId) {
         List<Trailpoint> points = trailPointRepository.findByTrailIdOrderByPointOrderAsc(trailId);
         if (points.size() < 2) return 0.0;

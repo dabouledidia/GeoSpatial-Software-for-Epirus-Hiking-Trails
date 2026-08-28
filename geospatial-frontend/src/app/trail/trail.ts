@@ -142,5 +142,8 @@ getTrail(id: number) {
       }
     });
   }
+  gpxFileUrl(trailId: number): any {
+  this.trailService.getGpxFile;
+}
 
 }

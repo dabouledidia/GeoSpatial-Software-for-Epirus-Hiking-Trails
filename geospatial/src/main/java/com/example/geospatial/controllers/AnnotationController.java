@@ -52,7 +52,9 @@ public class AnnotationController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/annotations/{id}")
-    public ResponseEntity<?> deleteAnnotation(@PathVariable Long id) {
-        return annotationService.deleteAnnotation(id);
-    }
+    public ResponseEntity<?> deleteAnnotation(
+        @PathVariable Long id,
+        @AuthenticationPrincipal CustomUserDetails currentUser) {
+            return annotationService.deleteAnnotation(id, currentUser.getUser());
+}
 }
