@@ -1,103 +1,390 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
 :host {
   display: block;
-  padding: 2rem;
-  background: #f5f7fa;
+  padding: 3rem 2rem 4rem;
+  background: #F6F7F3;
+  font-family: 'Inter', sans-serif;
+  color: #1B2A22;
 }
 
-/* Carousel spacing */
-:host ::ng-deep .p-carousel {
-  padding: 1rem 0;
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  max-width: 620px;
+  margin: 0 0 2.25rem;
 }
 
-/* Card styling */
-:host ::ng-deep .p-card {
-  border-radius: 20px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: none;
-  background: #ffffff;
-}
-
-/* Hover effect */
-:host ::ng-deep .p-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-/* Image styling */
-:host ::ng-deep .p-card img {
-  height: 420px;
-  width: 100%;
-  object-fit: cover;
-  border-bottom: 1px solid #eee;
-}
-
-/* Title */
-:host ::ng-deep .p-card .p-card-title a {
-  text-decoration: none;
-  font-size: 1.4rem;
+.page-title {
+  font-family: 'Fraunces', serif;
   font-weight: 600;
-  color: #2c3e50;
-  transition: color 0.2s;
+  font-size: 2.4rem;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+  color: #1B2A22;
 }
 
-:host ::ng-deep .p-card .p-card-title a:hover {
-  color: #3498db;
+.page-subtitle {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #5B6B60;
+  margin: 0;
 }
 
-/* Text content */
-:host ::ng-deep .p-card p {
-  margin: 0.4rem 0;
-  color: #555;
-  font-size: 0.95rem;
+/* =========================================================
+   FILTER BAR — underline tabs, not pill chips
+   ========================================================= */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 2.25rem;
+  border-bottom: 1px solid #E3E6DE;
+  padding-bottom: 0;
 }
 
-/* Strong labels */
-:host ::ng-deep .p-card strong {
-  color: #2c3e50;
+:host ::ng-deep .filter-bar .p-button {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: #5B6B60;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 500;
+  padding: 0.6rem 0.9rem;
+  box-shadow: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-/* Description */
-:host ::ng-deep .p-card p a {
-  color: #3498db;
+:host ::ng-deep .filter-bar .p-button .p-button-icon {
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+:host ::ng-deep .filter-bar .p-button:hover {
+  color: #2F6B4F;
+  background: transparent;
+}
+
+/* Active filter = not outlined (see [outlined] binding logic in template) */
+:host ::ng-deep .filter-bar .p-button:not(.p-button-outlined) {
+  color: #1B2A22;
+  font-weight: 600;
+  border-bottom-color: #2F6B4F;
+}
+
+:host ::ng-deep .filter-bar .p-button:focus-visible {
+  outline: 2px solid #2F6B4F;
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   CAROUSEL SHELL
+   ========================================================= */
+
+:host ::ng-deep .p-carousel-content {
+  padding: 0 0.25rem;
+}
+
+:host ::ng-deep .p-carousel-prev,
+:host ::ng-deep .p-carousel-next {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #1B2A22;
+  box-shadow: 0 2px 10px rgba(27, 42, 34, 0.1);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+:host ::ng-deep .p-carousel-prev:hover,
+:host ::ng-deep .p-carousel-next:hover {
+  background: #2F6B4F;
+  color: #FFFFFF;
+}
+
+:host ::ng-deep .p-carousel-indicators {
+  padding-top: 1.25rem;
+}
+
+:host ::ng-deep .p-carousel-indicator button {
+  background: #D7DCD1;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+:host ::ng-deep .p-carousel-indicator.p-highlight button {
+  background: #2F6B4F;
+}
+
+/* =========================================================
+   TRAIL CARD
+   ========================================================= */
+
+.trail-card-wrapper {
+  padding: 0.6rem;
+}
+
+:host ::ng-deep .trail-card-wrapper .p-card {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #E3E6DE;
+  box-shadow: none;
+  background: #FFFFFF;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+:host ::ng-deep .trail-card-wrapper .p-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(27, 42, 34, 0.1);
+}
+
+:host ::ng-deep .trail-card-wrapper .p-card-body {
+  padding: 1.4rem 1.5rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+:host ::ng-deep .trail-card-wrapper .p-card-title {
+  margin-bottom: 0;
+}
+
+/* --- image + overlay + badge --- */
+
+.trail-image-container {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+}
+
+.trail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+:host ::ng-deep .trail-card-wrapper .p-card:hover .trail-image {
+  transform: scale(1.04);
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 26, 20, 0.55) 0%, rgba(15, 26, 20, 0) 45%);
+  pointer-events: none;
+}
+
+.difficulty-badge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #5B6B60;
+  letter-spacing: 0.01em;
+}
+
+.difficulty-badge.badge-easy {
+  background: #E7F1EA;
+  color: #2F6B4F;
+}
+
+.difficulty-badge.badge-mid {
+  background: #F5EBD8;
+  color: #8A6A24;
+}
+
+.difficulty-badge.badge-hard {
+  background: #F5E3DA;
+  color: #A6502C;
+}
+
+/* --- title --- */
+
+:host ::ng-deep .trail-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: #1B2A22;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1.25;
+  transition: color 0.15s ease;
+}
+
+:host ::ng-deep .trail-title:hover {
+  color: #2F6B4F;
+}
+
+/* --- info row --- */
+
+.trail-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #E3E6DE;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.85rem;
-  margin-left: 5px;
+  color: #5B6B60;
+}
+
+.info-item i {
+  font-size: 0.8rem;
+  color: #2F6B4F;
+}
+
+/* --- description --- */
+
+.description {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #445048;
+}
+
+.description strong {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1B2A22;
+  margin-bottom: 0.3rem;
+}
+
+.more-link {
+  display: inline;
+  margin-left: 0.3rem;
+  color: #2F6B4F;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   cursor: pointer;
 }
 
-/* Buttons container */
-:host ::ng-deep .p-card .p-card-body {
+.more-link:hover {
+  color: #1B2A22;
+}
+
+/* --- actions --- */
+
+.card-actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
 }
 
-/* Buttons styling */
-:host ::ng-deep .p-button {
-  border-radius: 12px;
-  font-size: 0.85rem;
-  padding: 0.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+:host ::ng-deep .card-actions .p-button {
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.55rem 0.9rem;
+  box-shadow: none;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 
-/* Button hover */
-:host ::ng-deep .p-button:hover {
-  transform: scale(1.03);
+:host ::ng-deep .card-actions .p-button:hover {
+  transform: translateY(-1px);
 }
 
-/* Danger button tweak */
-:host ::ng-deep .p-button-danger {
-  background: #e74c3c;
-  border: none;
+:host ::ng-deep .action-primary {
+  background: #2F6B4F;
+  border-color: #2F6B4F;
+  color: #FFFFFF;
 }
 
-/* Responsive */
+:host ::ng-deep .action-primary:hover {
+  background: #26593F;
+}
+
+:host ::ng-deep .action-secondary {
+  background: transparent;
+  border: 1px solid #D7DCD1;
+  color: #1B2A22;
+}
+
+:host ::ng-deep .action-secondary:hover {
+  background: #F0F2ED;
+}
+
+:host ::ng-deep .action-delete {
+  background: transparent;
+  border: 1px solid #EBD3C7;
+  color: #A6502C;
+  margin-left: auto;
+}
+
+:host ::ng-deep .action-delete:hover {
+  background: #F5E3DA;
+}
+
+/* =========================================================
+   DIALOG
+   ========================================================= */
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #1B2A22;
+  padding: 1.3rem 1.5rem 1rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.dialog-content {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: #445048;
+}
+
+/* =========================================================
+   ACCESSIBILITY / MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  :host ::ng-deep .trail-card-wrapper .p-card,
+  .trail-image,
+  :host ::ng-deep .card-actions .p-button {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 768px) {
-  :host ::ng-deep .p-card {
-    width: 100% !important;
+  :host {
+    padding: 2rem 1.1rem 3rem;
   }
 
-  :host {
-    padding: 1rem;
+  .page-title {
+    font-size: 1.9rem;
+  }
+
+  .trail-image-container {
+    height: 260px;
+  }
+
+  :host ::ng-deep .action-delete {
+    margin-left: 0;
   }
 }
