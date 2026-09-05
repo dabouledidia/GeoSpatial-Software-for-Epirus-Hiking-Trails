@@ -47,4 +47,26 @@ private apiUrl = 'http://localhost:8080/';
     deleteImage(trailId: number): Observable<any>{
         return this.http.delete(this.apiUrl + "deleteImage/" + trailId)
     }
+
+
+    getTrailPoints(trailId: number): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl + `api/trails/${trailId}/points`);
+    }
+
+    saveTrailPoints(trailId: number, points: { lat: number; lng: number; elevation?: number }[]): Observable<any[]> {
+    return this.http.post<any[]>(this.apiUrl + `api/trails/${trailId}/points`, points);
+    }
+
+    importGpx(trailId: number, file: File): Observable<any[]> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any[]>(this.apiUrl + `api/trails/${trailId}/points/gpx`, formData);
+    }
+
+    getGpxFile(trailId: number): Observable<Blob> {
+    return this.http.get(
+        this.apiUrl + `api/trails/${trailId}/points/gpx`,
+        { responseType: 'blob' }
+    );
+    }
 }

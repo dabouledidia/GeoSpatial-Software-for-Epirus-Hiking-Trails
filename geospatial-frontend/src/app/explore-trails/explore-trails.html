@@ -1,47 +1,215 @@
-<p-carousel [value]="trails" [numVisible]="2" [numScroll]="1" [circular]="true">
-  <ng-template pTemplate="item" let-trail>
-    <p-card [style]="{ width: '50rem' }">
-      <ng-template pTemplate="header">
-        <img [src]="'http://localhost:8080/' + trail.image" class="w-full" />
-      </ng-template>
+<div class="trail-page">
 
-     <ng-template #title>
-        <a (click)="getTrail(trail.id!)" style="cursor: pointer;">
-          {{ trail.trailName }}
-        </a>
-      </ng-template>
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <h1 class="page-title">Trails</h1>
+    <p class="page-subtitle">
+      Discover routes shared by the community, from short afternoon walks to demanding climbs.
+    </p>
+  </header>
 
-      <p><strong>Location:</strong> {{ trail.location }}</p>
-      <p><strong>Length:</strong> {{ trail.lengthKm }} km</p>
-      <p><strong>Duration:</strong> {{ trail.duration }} H</p>
-      <p><strong>Difficulty:</strong> {{ trail.difficulty }}</p>
+  <!-- FILTERS -->
+  <nav class="filter-bar" aria-label="Trail filters">
+    <button
+      pButton
+      [outlined]="activeFilter !== 'all'"
+      label="All trails"
+      icon="pi pi-list"
+      (click)="applyFilter('all')">
+    </button>
 
-      <p>
-        <strong>Description:</strong>
-        {{
-          trail.description.length > 100
-            ? (trail.description | slice : 0 : 100) + '...'
-            : trail.description
-        }}
-        <a href="#" (click)="showFullComment(trail.description); $event.preventDefault()">
-          [more]
-        </a>
+    <button
+      pButton
+      [outlined]="activeFilter !== 'shortest'"
+      label="5 shortest"
+      icon="pi pi-arrow-down"
+      (click)="applyFilter('shortest')">
+    </button>
 
-      <button pButton label="Create Review" (click)="createReview(trail.id!)"></button>
-      <button pButton label="Reviews" (click)="getReviews(trail.id!)"></button>
-      <button
-        *ngIf="userService.getRole() === 'ROLE_ADMIN' || userService.getUser() === trail.email"
-        pButton
-        label="Delete"
-        class="p-button-danger"
-        (click)="deleteTrail(trail.id!)"
-      ></button>
-    </p-card>
-  </ng-template>
-</p-carousel>
+    <button
+      pButton
+      [outlined]="activeFilter !== 'longest'"
+      label="5 longest"
+      icon="pi pi-arrow-up"
+      (click)="applyFilter('longest')">
+    </button>
 
-<p-dialog header="Full Comment"
-          [(visible)]="displayCommentDialog"
-          [style]="{width: '30vw'}">
-    <p>{{ fullComment }}</p>
-</p-dialog>
+    <button
+      pButton
+      [outlined]="activeFilter !== 'hardest'"
+      label="5 hardest"
+      icon="pi pi-chart-line"
+      (click)="applyFilter('hardest')">
+    </button>
+
+    <button
+      pButton
+      [outlined]="activeFilter !== 'easiest'"
+      label="5 easiest"
+      icon="pi pi-check-circle"
+      (click)="applyFilter('easiest')">
+    </button>
+
+    <button
+      pButton
+      [outlined]="activeFilter !== 'quickest'"
+      label="5 quickest"
+      icon="pi pi-clock"
+      (click)="applyFilter('quickest')">
+    </button>
+  </nav>
+
+
+  <!-- TRAILS CAROUSEL -->
+  <p-carousel
+    [value]="trails"
+    [numVisible]="2"
+    [numScroll]="1"
+    [circular]="true"
+    [responsiveOptions]="[
+      { breakpoint: '1200px', numVisible: 2, numScroll: 1 },
+      { breakpoint: '768px', numVisible: 1, numScroll: 1 }
+    ]">
+
+    <ng-template pTemplate="item" let-trail>
+
+      <div class="trail-card-wrapper">
+
+        <p-card>
+
+          <!-- IMAGE -->
+          <ng-template pTemplate="header">
+            <div class="trail-image-container">
+              <img
+                [src]="'http://localhost:8080/' + trail.image"
+                [alt]="trail.trailName"
+                class="trail-image"
+              />
+
+              <div class="image-overlay"></div>
+
+              <div
+                class="difficulty-badge"
+                [class.badge-easy]="trail.difficulty === 'Easy'"
+                [class.badge-mid]="trail.difficulty === 'Mid'"
+                [class.badge-hard]="trail.difficulty === 'Hard'">
+                {{ trail.difficulty }}
+              </div>
+            </div>
+          </ng-template>
+
+
+          <!-- TITLE -->
+          <ng-template pTemplate="title">
+            <a
+              class="trail-title"
+              (click)="getTrail(trail.id!)">
+
+              {{ trail.trailName }}
+
+            </a>
+          </ng-template>
+
+
+          <!-- CONTENT -->
+          <div class="trail-info">
+
+            <div class="info-item">
+              <i class="pi pi-map-marker"></i>
+              <span>{{ trail.location }}</span>
+            </div>
+
+            <div class="info-item">
+              <i class="pi pi-map"></i>
+              <span>{{ trail.lengthKm }} km</span>
+            </div>
+
+            <div class="info-item">
+              <i class="pi pi-clock"></i>
+              <span>{{ trail.duration }} H</span>
+            </div>
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+          <div class="description">
+
+            <strong>Description</strong>
+
+            <span>
+              {{
+                trail.description.length > 100
+                  ? (trail.description | slice : 0 : 100) + '...'
+                  : trail.description
+              }}
+            </span>
+
+            <a
+              href="#"
+              class="more-link"
+              (click)="showFullComment(trail.description); $event.preventDefault()">
+              Read more
+            </a>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+          <div class="card-actions">
+
+            <button
+              pButton
+              label="Create Review"
+              icon="pi pi-star"
+              class="action-primary"
+              (click)="createReview(trail.id!)">
+            </button>
+
+            <button
+              pButton
+              label="Reviews"
+              icon="pi pi-comments"
+              class="action-secondary"
+              (click)="getReviews(trail.id!)">
+            </button>
+
+            <button
+              *ngIf="
+                userService.getRole() === 'ROLE_ADMIN' ||
+                userService.getUser() === trail.email
+              "
+              pButton
+              label="Delete"
+              icon="pi pi-trash"
+              class="action-delete"
+              (click)="deleteTrail(trail.id!)">
+            </button>
+
+          </div>
+
+        </p-card>
+
+      </div>
+
+    </ng-template>
+
+  </p-carousel>
+
+
+  <!-- DESCRIPTION DIALOG -->
+  <p-dialog
+    header="Trail description"
+    [(visible)]="displayCommentDialog"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '500px', maxWidth: '90vw' }">
+
+    <div class="dialog-content">
+      {{ fullComment }}
+    </div>
+
+  </p-dialog>
+
+</div>

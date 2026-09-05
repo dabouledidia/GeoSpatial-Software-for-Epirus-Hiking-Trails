@@ -66,7 +66,8 @@ void setUp() {
             "HARD",            
             "A scenic mountain trail", 
             "test@mail.com",    
-            "uploads/img.jpg"   
+            "uploads/img.jpg" ,
+            true 
     );
 }
 

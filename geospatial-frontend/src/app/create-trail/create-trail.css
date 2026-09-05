@@ -127,3 +127,12 @@ select.form-input {
   border-color: #1D9E75;
   color: #1D9E75;
 }
+
+::ng-deep .custom-upload span:not([class]) {
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}

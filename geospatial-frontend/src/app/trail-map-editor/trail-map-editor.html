@@ -1,0 +1,304 @@
+<div class="editor-layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+
+    <!-- Header -->
+    <div class="sidebar-header">
+
+      <button
+        type="button"
+        class="back-btn"
+        [routerLink]="['/trail-page', trailId]">
+        ← Back
+      </button>
+
+      <div>
+        <h2>{{ trailName || 'Trail Route Editor' }}</h2>
+        <p>Create or import a hiking route</p>
+      </div>
+
+    </div>
+
+
+    <!-- Route Summary -->
+    <div class="summary-card">
+
+      <div class="summary-item">
+        <span>Distance</span>
+        <strong>{{ distanceKm || 0 }} km</strong>
+      </div>
+
+      <div class="summary-item">
+        <span>Points</span>
+        <strong>{{ drawnPoints.length }}</strong>
+      </div>
+
+      <div class="summary-item">
+        <span>Status</span>
+
+        <span class="status draw" *ngIf="mode === 'draw'">
+          ● Drawing
+        </span>
+
+        <span class="status view" *ngIf="mode === 'view'">
+          ✓ View
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- ================= DRAW CARD ================= -->
+
+    <section class="card">
+
+      <div class="card-header">
+        <h3>✏️ Draw Route</h3>
+      </div>
+
+      <p class="hint">
+        Click anywhere on the map to create the trail.
+        Drag markers to adjust the route.
+      </p>
+
+      <ng-container *ngIf="mode !== 'draw'">
+        <button type="button" class="btn-primary w-100" (click)="startDrawing()">
+          ✏️ Start Drawing
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mode === 'draw'">
+
+        <div class="badge">
+          {{ drawnPoints.length }} Points Added
+        </div>
+
+        <div class="button-grid">
+
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="undoLastPoint()"
+            [disabled]="drawnPoints.length === 0">
+            ↩ Undo
+          </button>
+
+          <button
+            type="button"
+            class="btn-danger"
+            (click)="clearDrawnPoints()"
+            [disabled]="drawnPoints.length === 0">
+            🗑 Clear
+          </button>
+
+        </div>
+
+        <button type="button" class="btn-outline w-100" (click)="stopDrawing()">
+          ✓ Finish Drawing
+        </button>
+
+      </ng-container>
+
+    </section>
+
+
+    <!-- ================= ANNOTATION INFO ================= -->
+
+    <section class="card">
+
+      <div class="card-header">
+        <h3>📍 Points of Interest</h3>
+      </div>
+
+      <p class="hint">
+        Click anywhere on the map while in <strong>View</strong> mode to add a point
+        of interest.
+      </p>
+
+      <div class="annotation-count" *ngIf="annotations.length > 0">
+        📌 {{ annotations.length }} annotation{{ annotations.length === 1 ? '' : 's' }}
+      </div>
+
+      <div class="annotation-empty" *ngIf="annotations.length === 0">
+        No annotations yet.
+      </div>
+
+    </section>
+
+
+    <div class="divider">
+      <span>OR</span>
+    </div>
+
+
+    <!-- ================= GPX ================= -->
+
+    <section class="card">
+
+      <div class="card-header">
+        <h3>📂 Import GPX</h3>
+      </div>
+
+      <p class="hint">
+        Import a GPX file from AllTrails, Wikiloc, Komoot or Garmin.
+      </p>
+
+      <label class="upload-card">
+
+        <div class="upload-icon">📂</div>
+
+        <div>
+          <strong>{{ gpxFileName || 'Choose GPX File' }}</strong>
+          <small *ngIf="!gpxFileName">Drag & Drop or Browse</small>
+        </div>
+
+        <input hidden type="file" accept=".gpx" (change)="onGpxSelected($event)" />
+
+      </label>
+
+    </section>
+
+
+    <!-- ================= ALERTS ================= -->
+
+    <div class="alert success" *ngIf="saveSuccess">
+      ✅ Route saved successfully
+    </div>
+
+    <div class="alert error" *ngIf="errorMessage">
+      ⚠️ {{ errorMessage }}
+    </div>
+
+
+    <!-- ================= SAVE ================= -->
+
+    <div class="save-footer">
+      <button
+        type="button"
+        class="btn-save"
+        [disabled]="!canSave || isSaving"
+        (click)="saveRoute()">
+
+        <span *ngIf="!isSaving">💾 Save Route</span>
+        <span *ngIf="isSaving">Saving...</span>
+
+      </button>
+    </div>
+
+  </aside>
+
+
+  <!-- ===================== MAP ===================== -->
+
+  <main class="map-wrapper">
+
+    <div class="loading-overlay" *ngIf="isLoading">
+      <span class="spinner"></span>
+      Loading Route...
+    </div>
+
+    <div class="map-toolbar">
+
+      <div class="mode-badge" *ngIf="mode === 'draw'">
+        ✏️ Drawing Mode
+      </div>
+
+      <div class="instructions" *ngIf="mode === 'draw'">
+        Click • Drag • Right Click to Delete
+      </div>
+
+      <div class="view-mode-badge" *ngIf="mode === 'view'">
+        📍 Click the map to add a point of interest
+      </div>
+
+    </div>
+
+    <div #mapContainer class="map-container"></div>
+
+
+    <!-- ================= ADD ANNOTATION PANEL ================= -->
+
+    <div class="annotation-panel" *ngIf="showAddPanel">
+
+      <div class="annotation-panel-header">
+
+        <div>
+          <h3>📍 Add Point of Interest</h3>
+          <small>Add information about this location</small>
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          aria-label="Close"
+          (click)="cancelAddAnnotation()">
+          ✕
+        </button>
+
+      </div>
+
+      <div class="annotation-location">
+        📍 {{ pendingLat | number:'1.4-6' }}, {{ pendingLng | number:'1.4-6' }}
+      </div>
+
+      <div class="annotation-section">
+
+        <label>Type</label>
+
+        <div class="type-grid">
+          <button
+            type="button"
+            *ngFor="let t of annotationTypes"
+            class="type-btn"
+            [class.selected]="newAnnotationType === t.value"
+            (click)="newAnnotationType = $any(t.value)">
+            <span class="type-emoji">{{ t.emoji }}</span>
+            <span>{{ t.label }}</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="annotation-section">
+        <label for="annotation-title">Title</label>
+        <input
+          id="annotation-title"
+          type="text"
+          [(ngModel)]="newAnnotationTitle"
+          placeholder="e.g. Water fountain"
+          maxlength="100" />
+      </div>
+
+      <div class="annotation-section">
+        <label for="annotation-description">Description</label>
+        <textarea
+          id="annotation-description"
+          [(ngModel)]="newAnnotationDesc"
+          placeholder="Describe this location..."
+          rows="4"
+          maxlength="500">
+        </textarea>
+      </div>
+
+      <div class="annotation-actions">
+
+        <button type="button" class="annotation-cancel" (click)="cancelAddAnnotation()">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="annotation-save"
+          [disabled]="!newAnnotationTitle.trim()"
+          (click)="addAnnotation()">
+          📌 Add Annotation
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>

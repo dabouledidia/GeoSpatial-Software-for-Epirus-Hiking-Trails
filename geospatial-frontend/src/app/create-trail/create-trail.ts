@@ -27,7 +27,7 @@ export class CreateTrail {
   
   onFileSelect(event: any) {
   const file = event.files[0];
-
+    file.name = "image uploaded"
   if (file) {
     this.selectedFile = file;
     this.trailForm.patchValue({
@@ -37,7 +37,7 @@ export class CreateTrail {
 }
 
     trailForm!: FormGroup;
-  
+
 constructor(
   private fb: FormBuilder,
   private trailService: TrailService,

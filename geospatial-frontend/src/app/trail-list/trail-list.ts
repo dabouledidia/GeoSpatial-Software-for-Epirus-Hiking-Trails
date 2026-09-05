@@ -15,11 +15,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
-
-
-
-
-
 @Component({
   selector: 'app-trail-list',
   standalone: true,
@@ -33,6 +28,12 @@ export class TrailList implements OnInit{
 
   trails: Trail[] = [];
 
+  // Πλήρης λίστα, χωρίς φίλτρο αναζήτησης — το search() δουλεύει πάνω σε
+  // αυτήν, ποτέ πάνω στο ήδη-φιλτραρισμένο `trails`.
+  allTrails: Trail[] = [];
+
+  searchQuery: string = '';
+
   constructor(public userService: UserServices, private trailService: TrailService, private router: Router, private confirmationService: ConfirmationService
 ){}
   ngOnInit(): void {
@@ -41,13 +42,19 @@ export class TrailList implements OnInit{
 
   getTrails(){
     this.trailService.getTrails().subscribe((data: Trail[]) =>{
+      this.allTrails = data;
       this.trails = data;
+      this.searchQuery = '';
+      this.currentPage = 0;
     })
   }
 
   getUserTrails(){
     this.trailService.getUserTrails().subscribe((data: Trail[]) =>{
+      this.allTrails = data;
       this.trails = data;
+      this.searchQuery = '';
+      this.currentPage = 0;
     })
   }
 
@@ -100,6 +107,33 @@ showFullComment(text: string) {
         this.deleteTrail(id);
       }
     });
+  }
+
+  /* =======================================================
+     SEARCH
+     ======================================================= */
+
+  search(query: string): void {
+    this.searchQuery = query;
+    this.currentPage = 0;
+
+    const q = query.trim().toLowerCase();
+
+    if (!q) {
+      this.trails = this.allTrails;
+      return;
+    }
+
+    this.trails = this.allTrails.filter(trail =>
+      trail.trailName.toLowerCase().includes(q) ||
+      trail.location.toLowerCase().includes(q)
+    );
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.currentPage = 0;
+    this.trails = this.allTrails;
   }
 
 }

@@ -1,3 +1,22 @@
+<div class="search-bar">
+  <input
+    #searchInput
+    type="text"
+    class="search-input"
+    placeholder="Search by name or location"
+    [value]="searchQuery"
+    (input)="search(searchInput.value)"
+    (keyup.enter)="search(searchInput.value)" />
+
+
+  <button
+    *ngIf="searchQuery"
+    class="btn-clear"
+    (click)="searchInput.value = ''; clearSearch()">
+    Clear
+  </button>
+</div>
+
 <div class="trails-grid">
   <div *ngFor="let trail of paginatedTrails()" class="trail-card">
 
@@ -42,10 +61,15 @@
       </div>
     </div>
   </div>
+
+  <p *ngIf="paginatedTrails().length === 0" class="no-results">
+    No trails match "{{ searchQuery }}".
+  </p>
 </div>
 
 <div class="pagination-wrap">
-  <p-paginator [rows]="5" [totalRecords]="trails.length"
+  <p-paginator [rows]="4" [totalRecords]="trails.length"
+    [first]="currentPage * rowsPerPage"
     (onPageChange)="onPageChange($event)"></p-paginator>
 </div>
 

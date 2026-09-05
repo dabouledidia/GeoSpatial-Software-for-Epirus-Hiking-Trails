@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -60,6 +61,18 @@ public class Trail {
     @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY )
     @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trail", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OrderBy("pointOrder ASC")
+    private List<Trailpoint> trailPoints = new ArrayList<>();
+
+    // Path to the raw uploaded GPX file on disk (relative, as returned by
+    // FileStorageService). Null if this trail's route is represented as
+    // drawn points (trailPoints) instead of an imported file — a trail
+    // uses one representation or the other, not both.
+    @Column(name = "gpx_path")
+    private String gpxPath;
 
     public Trail(){}
 
@@ -172,5 +185,20 @@ public class Trail {
         this.user = user;
     }
 
-    
+    public List<Trailpoint> getTrailPoints() {
+    return trailPoints;
+}
+ 
+    public void setTrailPoints(List<Trailpoint> trailPoints) {
+        this.trailPoints = trailPoints;
+    }
+
+    public String getGpxPath() {
+        return gpxPath;
+    }
+
+    public void setGpxPath(String gpxPath) {
+        this.gpxPath = gpxPath;
+    }
+
 }
