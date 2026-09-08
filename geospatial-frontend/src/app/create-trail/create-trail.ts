@@ -27,7 +27,6 @@ export class CreateTrail {
   
   onFileSelect(event: any) {
   const file = event.files[0];
-    file.name = "image uploaded"
   if (file) {
     this.selectedFile = file;
     this.trailForm.patchValue({
