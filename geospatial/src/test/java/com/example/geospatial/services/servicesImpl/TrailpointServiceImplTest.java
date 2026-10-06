@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ class TrailpointServiceImplTest {
     }
 
     @Test
-    void savePoints_success_noExistingGpx() {
+    void savePoints_success_noExistingGpx() throws IOException{
         trail.setGpxPath(null);
         when(trailRepository.findById(1L)).thenReturn(Optional.of(trail));
         when(trailPointRepository.saveAll(anyList())).thenAnswer(inv -> inv.getArgument(0));
