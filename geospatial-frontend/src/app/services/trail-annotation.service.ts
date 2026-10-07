@@ -9,10 +9,8 @@ export class AnnotationService {
 
   private http = inject(HttpClient);
 
-  // Adjust this base if your app proxies to Spring differently in dev
-  // (check proxy.conf.json) — matches AnnotationController's @RequestMapping("/api/trails").
-  private readonly baseUrl = 'http://localhost:8080/api/trails';
 
+  private readonly baseUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com/api/trails';
   getAnnotations(trailId: number): Observable<TrailAnnotation[]> {
     return this.http.get<TrailAnnotation[]>(`${this.baseUrl}/${trailId}/annotations`);
   }

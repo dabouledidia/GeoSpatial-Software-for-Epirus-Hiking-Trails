@@ -10,8 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class UserServices{
     
-    private apiUrl = 'http://localhost:8080/';
-
+    private apiUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com/';
     constructor(private http: HttpClient){}
 
     loginUser(userCredentials: FormGroup): Observable<any> {

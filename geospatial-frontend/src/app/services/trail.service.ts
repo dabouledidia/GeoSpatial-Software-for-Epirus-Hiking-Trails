@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TrailService {
-private apiUrl = 'http://localhost:8080/';
-
+private apiUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com/';
     constructor(private http: HttpClient){}
 
     getTrails(): Observable<any[]>{

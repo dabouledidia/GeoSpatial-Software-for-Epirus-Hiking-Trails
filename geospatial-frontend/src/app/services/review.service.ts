@@ -6,8 +6,7 @@ import { Review } from '../models/review.model';
 @Injectable({ providedIn: 'root' })
 export class ReviewService {
   
-  private apiUrl = 'http://localhost:8080';
-
+  private apiUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com';  
   constructor(private http: HttpClient) {}
 
   addReview(trailId: number, reviewData: any): Observable<any> {
