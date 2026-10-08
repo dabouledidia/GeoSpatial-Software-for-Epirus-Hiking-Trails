@@ -11,4 +11,4 @@ jobs:
 
     steps:
       - name: Ping Render
-        run: curl -f https://geospatial-software-for-epirus-hiking.onrender.com
+        run: curl -i https://geospatial-software-for-epirus-hiking.onrender.com
