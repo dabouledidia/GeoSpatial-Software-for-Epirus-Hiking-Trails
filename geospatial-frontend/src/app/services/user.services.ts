@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class UserServices{
     
-    private apiUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com/';
+    private apiUrl = environment.apiUrl + '/';    
     constructor(private http: HttpClient){}
 
     loginUser(userCredentials: FormGroup): Observable<any> {

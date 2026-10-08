@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 import { TrailAnnotation, CreateTrailAnnotationRequest } from '../models/trail-annotation.model';
 
@@ -10,7 +11,7 @@ export class AnnotationService {
   private http = inject(HttpClient);
 
 
-  private readonly baseUrl = 'https://geospatial-software-for-epirus-hiking.onrender.com/api/trails';
+  private readonly baseUrl = environment.apiUrl + '/api/trails';
   getAnnotations(trailId: number): Observable<TrailAnnotation[]> {
     return this.http.get<TrailAnnotation[]>(`${this.baseUrl}/${trailId}/annotations`);
   }

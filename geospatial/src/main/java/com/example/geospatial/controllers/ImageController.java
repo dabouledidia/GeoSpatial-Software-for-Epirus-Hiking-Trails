@@ -18,16 +18,14 @@ import com.example.geospatial.DTO.ImagesDTO;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.repositories.TrailRepository;
 import com.example.geospatial.services.ImageService;
+import com.example.geospatial.services.SupabaseStorageService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 @RestController
 public class ImageController {
@@ -38,31 +36,41 @@ public class ImageController {
     @Autowired
     private ImageService imageServiceImpl;
 
+    @Autowired
+    private SupabaseStorageService supabaseStorageService;
+
     private static final Logger logger = LoggerFactory.getLogger(TrailController.class);
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PostMapping("/add_images/{trailId}")
-    public ResponseEntity<?> addImages(
-            @PathVariable Long trailId,
-            @RequestParam("images") List<MultipartFile> images) throws IOException {
+@PostMapping("/add_images/{trailId}")
+public ResponseEntity<?> addImages(
+        @PathVariable Long trailId,
+        @RequestParam("images") List<MultipartFile> images) {
 
+    try {
         Trail trail = trailRepository.findById(trailId)
                 .orElseThrow(() -> new RuntimeException("Trail not found"));
 
-        List<String> savedPaths = new ArrayList<>();
+        List<String> imageUrls = new ArrayList<>();
 
         for (MultipartFile image : images) {
-            String fileName = image.getOriginalFilename();
-            Path filePath = Paths.get("uploads", fileName);
-            Files.createDirectories(filePath.getParent());
-            Files.write(filePath, image.getBytes());
-            savedPaths.add(fileName);
+            String imageUrl = supabaseStorageService.uploadImage(image);
+            imageUrls.add(imageUrl);
         }
 
-        imageServiceImpl.addImages(savedPaths, trail);
+        imageServiceImpl.addImages(imageUrls, trail);
 
-        return ResponseEntity.ok(Map.of("message", "Images uploaded successfully"));
+        return ResponseEntity.ok(
+                Map.of("message", "Images uploaded successfully")
+        );
+
+    } catch (Exception e) {
+        logger.error("Error uploading images", e);
+
+        return ResponseEntity.internalServerError()
+                .body(Map.of("error", "Unable to upload images."));
     }
+}
 
     @GetMapping("/images_by_trail/{trailId}")
     public ResponseEntity<?> getImages(@PathVariable Long trailId){

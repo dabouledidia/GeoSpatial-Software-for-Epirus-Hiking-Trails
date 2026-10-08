@@ -20,7 +20,7 @@
 <div class="trails-grid">
   <div *ngFor="let trail of paginatedTrails()" class="trail-card">
 
-    <img [src]="'https://geospatial-software-for-epirus-hiking.onrender.com/' + trail.image" />
+    <img [src]="trail.image" />
 
     <div class="trail-body">
       <div class="trail-header">
