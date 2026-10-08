@@ -5,7 +5,6 @@ import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.Trailpoint;
 import com.example.geospatial.repositories.TrailPointRepository;
 import com.example.geospatial.repositories.TrailRepository;
-import com.example.geospatial.services.FileStorageService;
 import com.example.geospatial.services.TrailpointService;
 
 import org.springframework.stereotype.Service;
@@ -17,20 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.geospatial.services.SupabaseStorageService;
+
 @Service
 public class TrailpointServiceImpl implements TrailpointService {
 
     private final TrailPointRepository trailPointRepository;
     private final TrailRepository trailRepository;
-    private final FileStorageService fileStorageService;
+    private final SupabaseStorageService supabaseStorageService;
 
     public TrailpointServiceImpl(
             TrailPointRepository trailPointRepository,
             TrailRepository trailRepository,
-            FileStorageService fileStorageService) {
+            SupabaseStorageService supabaseStorageService) {
         this.trailPointRepository = trailPointRepository;
         this.trailRepository = trailRepository;
-        this.fileStorageService = fileStorageService;
+        this.supabaseStorageService = supabaseStorageService;
     }
 
     // Get all points for a trail
@@ -51,15 +52,9 @@ public class TrailpointServiceImpl implements TrailpointService {
         // GPX file, not both. If this trail previously had a GPX file,
         // drop it now so the two representations can't disagree.
         if (trail.getGpxPath() != null) {
-            try {
-                fileStorageService.deleteFile(trail.getGpxPath());
-            } catch (Exception ignored) {
-                // Stale file on disk isn't worth failing the save over —
-                // the DB reference is what matters and is cleared below.
-            }
             trail.setGpxPath(null);
             trailRepository.save(trail);
-        }
+    }
 
         trailPointRepository.deleteAllByTrailId(trailId);
 
@@ -88,7 +83,7 @@ public class TrailpointServiceImpl implements TrailpointService {
         // any previously drawn points.
         trailPointRepository.deleteAllByTrailId(trailId);
 
-        String path = fileStorageService.storeGpxFile(trailId, file);
+        String path = supabaseStorageService.uploadGpx(file);
         trail.setGpxPath(path);
         trailRepository.save(trail);
 
@@ -103,7 +98,26 @@ public class TrailpointServiceImpl implements TrailpointService {
             throw new FileNotFoundException("No GPX file stored for trail " + trailId);
         }
 
-        return fileStorageService.readFile(trail.getGpxPath());
+        java.net.URI uri = java.net.URI.create(trail.getGpxPath());
+
+        java.net.http.HttpRequest request =
+                java.net.http.HttpRequest.newBuilder()
+                        .uri(uri)
+                        .GET()
+                        .build();
+
+        java.net.http.HttpResponse<byte[]> response =
+                java.net.http.HttpClient.newHttpClient()
+                        .send(request, java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new RuntimeException(
+                    "Unable to download GPX from Supabase: "
+                    + response.statusCode()
+            );
+        }
+
+        return response.body();
     }
 
     // Calculate total distance in km from saved points.

@@ -1,6 +1,5 @@
 package com.example.geospatial.controllers;
 
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +24,8 @@ import com.example.geospatial.DTO.TrailDTO;
 import com.example.geospatial.models.CustomUserDetails;
 import com.example.geospatial.models.Trail;
 import com.example.geospatial.models.User;
+import com.example.geospatial.services.SupabaseStorageService;
 import com.example.geospatial.services.TrailService;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RestController
 public class TrailController {
@@ -37,6 +34,9 @@ public class TrailController {
 
     @Autowired
     private TrailService trailServiceImpl;
+    
+    @Autowired
+    private SupabaseStorageService supabaseStorageService;
 
     @GetMapping("/trail_by_id/{id}")
     public ResponseEntity<?> getTrail(@Validated @PathVariable long id){
@@ -87,10 +87,7 @@ public ResponseEntity<?> createTrail(
     try {
         User user = currentUser.getUser();
 
-        String fileName = image.getOriginalFilename();
-        Path filePath = Paths.get("uploads", fileName);
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, image.getBytes());
+        String imageUrl = supabaseStorageService.uploadImage(image);
 
         Trail trail = new Trail();
         trail.setName(name);
@@ -99,7 +96,7 @@ public ResponseEntity<?> createTrail(
         trail.setDuration(duration);
         trail.setDifficulty(difficulty);
         trail.setDescription(description);
-        trail.setImage("uploads/" + fileName); 
+        trail.setImage(imageUrl); 
         trail.setUser(user);
 
         trailServiceImpl.createTrail(trail);

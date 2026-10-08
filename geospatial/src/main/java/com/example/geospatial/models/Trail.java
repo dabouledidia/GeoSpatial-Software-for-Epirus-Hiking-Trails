@@ -67,10 +67,7 @@ public class Trail {
     @OrderBy("pointOrder ASC")
     private List<Trailpoint> trailPoints = new ArrayList<>();
 
-    // Path to the raw uploaded GPX file on disk (relative, as returned by
-    // FileStorageService). Null if this trail's route is represented as
-    // drawn points (trailPoints) instead of an imported file — a trail
-    // uses one representation or the other, not both.
+
     @Column(name = "gpx_path")
     private String gpxPath;
 
