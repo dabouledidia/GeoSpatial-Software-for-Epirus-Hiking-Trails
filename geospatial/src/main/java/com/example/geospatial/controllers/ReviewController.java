@@ -34,6 +34,7 @@ public class ReviewController {
     @Autowired
     private TrailRepository trailRepository;
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/add/{trailId}")
     public ResponseEntity<Map<String,String>> addReview(
             @PathVariable Long trailId,
@@ -53,6 +54,7 @@ public class ReviewController {
         );
         return ResponseEntity.ok(Map.of("message", "Review created successfully"));
     }
+    
     
     @GetMapping("/reviews/{trailId}")
     public ResponseEntity<?> getReviewsByTrail(@PathVariable Long trailId) {

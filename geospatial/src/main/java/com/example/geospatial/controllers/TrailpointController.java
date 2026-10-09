@@ -4,6 +4,7 @@ import com.example.geospatial.DTO.TrailpointDTO;
 import com.example.geospatial.services.TrailpointService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class TrailpointController {
         return ResponseEntity.ok(trailpointService.getPointsByTrail(trailId));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<List<TrailpointDTO>> savePoints(
             @PathVariable Long trailId,
@@ -34,6 +36,7 @@ public class TrailpointController {
         return ResponseEntity.ok(trailpointService.savePoints(trailId, points));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/gpx")
     public ResponseEntity<?> importGpx(
             @PathVariable Long trailId,
@@ -46,8 +49,6 @@ public class TrailpointController {
         }
     }
 
-    // Serves the raw GPX file back — TrailMapComponent's [gpxUrl] input
-    // fetches this URL directly and parses it client-side.
     @GetMapping("/gpx")
     public ResponseEntity<byte[]> getGpxFile(@PathVariable Long trailId) {
         try {

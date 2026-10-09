@@ -60,6 +60,7 @@ public class TrailController {
         } 
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/user_trails")
     public ResponseEntity<?> getUserTrail(@AuthenticationPrincipal CustomUserDetails currentUser){
         try {
