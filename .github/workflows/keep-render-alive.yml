@@ -10,5 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      
       - name: Ping Render
-        run: curl -i https://geospatial-software-for-epirus-hiking.onrender.com
+        run: curl -fsS --max-time 30 https://geospatial-software-for-epirus-hiking.onrender.com/all_trails
